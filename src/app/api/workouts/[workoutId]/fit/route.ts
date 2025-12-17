@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { createWorkoutFit } from "@/lib/fit/create-workout-fit";
+import { createWorkoutFit, type WorkoutStructure } from "@/lib/fit/create-workout-fit";
 
 interface RouteParams {
   params: Promise<{
@@ -35,23 +35,7 @@ export async function GET(request: Request, { params }: RouteParams) {
     const fitBuffer = createWorkoutFit({
       title: workout.title,
       workout_type: workout.workout_type,
-      workout_structure: workout.workout_structure as {
-        segments: Array<{
-          type: string;
-          name: string;
-          duration_type?: string;
-          duration_value?: number;
-          target_type?: string;
-          target_pace_low?: number;
-          target_pace_high?: number;
-          target_zone?: number;
-          repeat_count?: number;
-          segments?: Array<unknown>;
-          notes?: string;
-        }>;
-        estimated_duration_minutes: number;
-        estimated_distance_km: number;
-      } | null,
+      workout_structure: workout.workout_structure as WorkoutStructure | null,
       target_duration_minutes: workout.target_duration_minutes,
       target_distance_km: workout.target_distance_km ? Number(workout.target_distance_km) : null,
     });
@@ -60,7 +44,7 @@ export async function GET(request: Request, { params }: RouteParams) {
     const filename = `${workout.title.replace(/[^a-zA-Z0-9]/g, "_")}.fit`;
 
     // Return FIT file as download
-    return new NextResponse(fitBuffer, {
+    return new NextResponse(new Uint8Array(fitBuffer), {
       status: 200,
       headers: {
         "Content-Type": "application/octet-stream",

@@ -12,7 +12,7 @@ import { AvailabilityForm } from "./availability-form";
 import { PlanReview } from "./plan-review";
 import { generatePlanFromTemplates } from "@/lib/training/generate-plan-from-templates";
 import { createClient } from "@/lib/supabase/client";
-import type { GoalType, ExperienceLevel } from "@/types/database";
+import type { GoalType, ExperienceLevel, TablesInsert, Json } from "@/types/database";
 
 export interface PlanWizardData {
   // Step 1: Goal
@@ -132,7 +132,7 @@ export function PlanWizard() {
         weeksDuration,
       });
 
-      if (!planResult.success) {
+      if (!planResult.success || !planResult.workouts) {
         toast.error(planResult.error || "Kon geen schema genereren");
         return;
       }
@@ -168,7 +168,7 @@ export function PlanWizard() {
       }
 
       // Create individual workouts
-      const workouts = planResult.workouts.map((workout) => ({
+      const workouts: TablesInsert<'workouts'>[] = planResult.workouts.map((workout) => ({
         plan_id: plan.id,
         user_id: user.id,
         scheduled_date: workout.scheduled_date,
@@ -181,7 +181,7 @@ export function PlanWizard() {
         target_distance_km: workout.target_distance_km,
         target_pace_min_per_km: workout.target_pace_min_per_km,
         target_heart_rate_zone: workout.target_heart_rate_zone,
-        workout_structure: workout.workout_structure,
+        workout_structure: workout.workout_structure as Json,
         coach_notes: workout.coach_notes,
         status: "scheduled",
       }));

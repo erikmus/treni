@@ -147,7 +147,7 @@ export async function generatePlanFromTemplates(
       const weekWorkouts = generateWeekWorkouts(
         week,
         weekStructure,
-        workoutTemplates,
+        workoutTemplates as unknown as WorkoutTemplate[],
         input,
         scalingFactor * volumeMultiplier,
         startDate
@@ -241,7 +241,7 @@ async function findBestPlanTemplate(
     }
   }
 
-  return bestTemplate as PlanTemplate;
+  return bestTemplate as unknown as PlanTemplate;
 }
 
 function calculateScalingFactor(input: GeneratePlanInput): number {
@@ -250,6 +250,7 @@ function calculateScalingFactor(input: GeneratePlanInput): number {
     beginner: 15,
     intermediate: 30,
     advanced: 50,
+    elite: 80,
   };
 
   const expectedKm = baseWeeklyKm[input.experienceLevel];
@@ -389,6 +390,7 @@ function selectWorkoutTemplate(
     beginner: 2,
     intermediate: 4,
     advanced: 5,
+    elite: 6,
   };
   const maxDifficulty = expMapping[experience];
   candidates = candidates.filter((t) => t.difficulty_level <= maxDifficulty);

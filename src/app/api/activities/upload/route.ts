@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { parseTCX, trackpointsToGpxData, lapsToSplitsData } from "@/lib/parsers/parse-tcx";
+import type { TablesInsert, Json } from "@/types/database";
 
 export async function POST(request: NextRequest) {
   try {
@@ -75,30 +76,32 @@ export async function POST(request: NextRequest) {
       const finishedAt = new Date(activity.startTime.getTime() + activity.totalTimeSeconds * 1000);
 
       // Insert activity
+      const activityData: TablesInsert<'activities'> = {
+        user_id: user.id,
+        source: "import",
+        external_id: externalId,
+        activity_type: activity.sport,
+        title: generateTitle(activity.sport, activity.distanceMeters),
+        started_at: activity.startTime.toISOString(),
+        finished_at: finishedAt.toISOString(),
+        duration_seconds: Math.round(activity.totalTimeSeconds),
+        moving_time_seconds: Math.round(activity.totalTimeSeconds), // TCX doesn't distinguish moving time
+        distance_meters: activity.distanceMeters,
+        avg_pace_sec_per_km: activity.averagePaceSecPerKm,
+        best_pace_sec_per_km: activity.bestPaceSecPerKm,
+        avg_heart_rate: activity.averageHeartRateBpm,
+        max_heart_rate: activity.maximumHeartRateBpm,
+        elevation_gain_meters: activity.elevationGainMeters,
+        elevation_loss_meters: activity.elevationLossMeters,
+        avg_cadence: activity.averageCadence,
+        calories: activity.calories > 0 ? activity.calories : null,
+        gpx_data: gpxData as Json,
+        splits_data: splitsData as Json,
+      };
+
       const { data: inserted, error: insertError } = await supabase
         .from("activities")
-        .insert({
-          user_id: user.id,
-          source: "import",
-          external_id: externalId,
-          activity_type: activity.sport,
-          title: generateTitle(activity.sport, activity.distanceMeters),
-          started_at: activity.startTime.toISOString(),
-          finished_at: finishedAt.toISOString(),
-          duration_seconds: Math.round(activity.totalTimeSeconds),
-          moving_time_seconds: Math.round(activity.totalTimeSeconds), // TCX doesn't distinguish moving time
-          distance_meters: activity.distanceMeters,
-          avg_pace_sec_per_km: activity.averagePaceSecPerKm,
-          best_pace_sec_per_km: activity.bestPaceSecPerKm,
-          avg_heart_rate: activity.averageHeartRateBpm,
-          max_heart_rate: activity.maximumHeartRateBpm,
-          elevation_gain_meters: activity.elevationGainMeters,
-          elevation_loss_meters: activity.elevationLossMeters,
-          avg_cadence: activity.averageCadence,
-          calories: activity.calories > 0 ? activity.calories : null,
-          gpx_data: gpxData,
-          splits_data: splitsData,
-        })
+        .insert(activityData)
         .select()
         .single();
 

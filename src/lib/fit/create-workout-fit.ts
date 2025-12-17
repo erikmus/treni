@@ -57,7 +57,7 @@ const INTENSITY = {
   INTERVAL: 5,
 };
 
-interface WorkoutSegment {
+export interface WorkoutSegment {
   type: string;
   name: string;
   duration_type?: string;
@@ -71,13 +71,13 @@ interface WorkoutSegment {
   notes?: string;
 }
 
-interface WorkoutStructure {
+export interface WorkoutStructure {
   segments: WorkoutSegment[];
   estimated_duration_minutes: number;
   estimated_distance_km: number;
 }
 
-interface WorkoutData {
+export interface WorkoutData {
   title: string;
   workout_type: string;
   workout_structure: WorkoutStructure | null;
