@@ -275,7 +275,16 @@
       "googleUnlinked": "Google account unlinked",
       "errorLinkingGoogle": "Something went wrong while linking Google",
       "errorUnlinkingGoogle": "Something went wrong while unlinking Google",
-      "cannotUnlinkOnly": "You cannot unlink your only login method"
+      "cannotUnlinkOnly": "You cannot unlink your only login method",
+      "changePhoto": "Change photo",
+      "removePhoto": "Remove",
+      "photoHint": "JPG, PNG, GIF or WebP. Max 5MB.",
+      "avatarUpdated": "Profile photo updated",
+      "avatarRemoved": "Profile photo removed",
+      "errorUploadingAvatar": "Something went wrong while uploading",
+      "errorRemovingAvatar": "Something went wrong while removing",
+      "invalidFileType": "Invalid file type. Use JPG, PNG, GIF or WebP.",
+      "fileTooLarge": "File is too large. Maximum is 5MB."
     },
     "preferences": {
       "title": "Preferences",

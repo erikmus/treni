@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { Loader2, Save, Link2, Unlink } from "lucide-react";
+import { Loader2, Save, Link2, Unlink, Camera, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,10 +39,13 @@ const weekDayKeys = ["monday", "tuesday", "wednesday", "thursday", "friday", "sa
 export function ProfileForm({ profile }: ProfileFormProps) {
   const router = useRouter();
   const t = useTranslations();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [isLinkingGoogle, setIsLinkingGoogle] = useState(false);
   const [isUnlinkingGoogle, setIsUnlinkingGoogle] = useState(false);
   const [identities, setIdentities] = useState<UserIdentity[]>([]);
+  const [avatarUrl, setAvatarUrl] = useState(profile.avatar_url);
   const [formData, setFormData] = useState({
     full_name: profile.full_name,
     locale: profile.locale,
@@ -101,6 +104,108 @@ export function ProfileForm({ profile }: ProfileFormProps) {
       toast.error(t("settings.profile.errorUnlinkingGoogle"));
     } finally {
       setIsUnlinkingGoogle(false);
+    }
+  }
+
+  async function handleAvatarUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error(t("settings.profile.invalidFileType"));
+      return;
+    }
+
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error(t("settings.profile.fileTooLarge"));
+      return;
+    }
+
+    setIsUploadingAvatar(true);
+    try {
+      const supabase = createClient();
+      
+      // Generate unique filename
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${profile.id}/${Date.now()}.${fileExt}`;
+
+      // Delete old avatar if it exists in our storage
+      if (avatarUrl && avatarUrl.includes("avatars")) {
+        const oldPath = avatarUrl.split("/avatars/")[1];
+        if (oldPath) {
+          await supabase.storage.from("avatars").remove([oldPath]);
+        }
+      }
+
+      // Upload new avatar
+      const { error: uploadError } = await supabase.storage
+        .from("avatars")
+        .upload(fileName, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from("avatars")
+        .getPublicUrl(fileName);
+
+      // Update profile with new avatar URL
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update({ avatar_url: publicUrl, updated_at: new Date().toISOString() })
+        .eq("id", profile.id);
+
+      if (updateError) throw updateError;
+
+      setAvatarUrl(publicUrl);
+      toast.success(t("settings.profile.avatarUpdated"));
+      router.refresh();
+    } catch (error) {
+      console.error("Error uploading avatar:", error);
+      toast.error(t("settings.profile.errorUploadingAvatar"));
+    } finally {
+      setIsUploadingAvatar(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  }
+
+  async function handleRemoveAvatar() {
+    if (!avatarUrl) return;
+
+    setIsUploadingAvatar(true);
+    try {
+      const supabase = createClient();
+
+      // Delete from storage if it's our uploaded file
+      if (avatarUrl.includes("avatars")) {
+        const path = avatarUrl.split("/avatars/")[1];
+        if (path) {
+          await supabase.storage.from("avatars").remove([path]);
+        }
+      }
+
+      // Update profile to remove avatar URL
+      const { error } = await supabase
+        .from("profiles")
+        .update({ avatar_url: null, updated_at: new Date().toISOString() })
+        .eq("id", profile.id);
+
+      if (error) throw error;
+
+      setAvatarUrl("");
+      toast.success(t("settings.profile.avatarRemoved"));
+      router.refresh();
+    } catch (error) {
+      console.error("Error removing avatar:", error);
+      toast.error(t("settings.profile.errorRemovingAvatar"));
+    } finally {
+      setIsUploadingAvatar(false);
     }
   }
 
@@ -165,16 +270,76 @@ export function ProfileForm({ profile }: ProfileFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       {/* Avatar Section */}
-      <div className="flex items-center gap-4">
-        <Avatar className="h-20 w-20">
-          <AvatarImage src={profile.avatar_url} alt={formData.full_name} />
-          <AvatarFallback className="bg-primary/10 text-primary text-xl">
-            {getInitials(formData.full_name)}
-          </AvatarFallback>
-        </Avatar>
-        <div>
+      <div className="flex items-start gap-4">
+        <div className="relative group">
+          <Avatar className="h-20 w-20">
+            <AvatarImage src={avatarUrl} alt={formData.full_name} />
+            <AvatarFallback className="bg-primary/10 text-primary text-xl">
+              {getInitials(formData.full_name)}
+            </AvatarFallback>
+          </Avatar>
+          
+          {/* Upload overlay */}
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isUploadingAvatar}
+            className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+          >
+            {isUploadingAvatar ? (
+              <Loader2 className="h-6 w-6 text-white animate-spin" />
+            ) : (
+              <Camera className="h-6 w-6 text-white" />
+            )}
+          </button>
+          
+          {/* Hidden file input */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/gif,image/webp"
+            onChange={handleAvatarUpload}
+            className="hidden"
+          />
+        </div>
+        
+        <div className="flex-1">
           <p className="font-medium">{formData.full_name || t("settings.profile.noName")}</p>
-          <p className="text-sm text-muted-foreground">{profile.email}</p>
+          <p className="text-sm text-muted-foreground mb-3">{profile.email}</p>
+          
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isUploadingAvatar}
+            >
+              {isUploadingAvatar ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Camera className="mr-2 h-4 w-4" />
+              )}
+              {t("settings.profile.changePhoto")}
+            </Button>
+            
+            {avatarUrl && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={handleRemoveAvatar}
+                disabled={isUploadingAvatar}
+                className="text-destructive hover:text-destructive"
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                {t("settings.profile.removePhoto")}
+              </Button>
+            )}
+          </div>
+          <p className="text-xs text-muted-foreground mt-2">
+            {t("settings.profile.photoHint")}
+          </p>
         </div>
       </div>
 

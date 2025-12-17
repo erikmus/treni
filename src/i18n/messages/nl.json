@@ -275,7 +275,16 @@
       "googleUnlinked": "Google account ontkoppeld",
       "errorLinkingGoogle": "Er ging iets mis bij het koppelen van Google",
       "errorUnlinkingGoogle": "Er ging iets mis bij het ontkoppelen van Google",
-      "cannotUnlinkOnly": "Je kunt je enige inlogmethode niet ontkoppelen"
+      "cannotUnlinkOnly": "Je kunt je enige inlogmethode niet ontkoppelen",
+      "changePhoto": "Foto wijzigen",
+      "removePhoto": "Verwijderen",
+      "photoHint": "JPG, PNG, GIF of WebP. Max 5MB.",
+      "avatarUpdated": "Profielfoto bijgewerkt",
+      "avatarRemoved": "Profielfoto verwijderd",
+      "errorUploadingAvatar": "Er ging iets mis bij het uploaden",
+      "errorRemovingAvatar": "Er ging iets mis bij het verwijderen",
+      "invalidFileType": "Ongeldig bestandstype. Gebruik JPG, PNG, GIF of WebP.",
+      "fileTooLarge": "Bestand is te groot. Maximum is 5MB."
     },
     "preferences": {
       "title": "Voorkeuren",

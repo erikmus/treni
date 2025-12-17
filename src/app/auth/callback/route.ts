@@ -15,9 +15,31 @@ export async function GET(request: Request) {
       if (user) {
         const { data: profile } = await supabase
           .from('profiles')
-          .select('locale')
+          .select('locale, avatar_url, full_name')
           .eq('id', user.id)
           .single()
+        
+        // Sync avatar and name from OAuth provider (Google) if not already set
+        const userMetadata = user.user_metadata
+        const updates: Record<string, string> = {}
+        
+        // If user logged in with Google and doesn't have an avatar yet, use Google's
+        if (userMetadata?.avatar_url && !profile?.avatar_url) {
+          updates.avatar_url = userMetadata.avatar_url
+        }
+        
+        // If user doesn't have a name yet, use Google's
+        if (userMetadata?.full_name && !profile?.full_name) {
+          updates.full_name = userMetadata.full_name
+        }
+        
+        // Update profile if there are changes
+        if (Object.keys(updates).length > 0) {
+          await supabase
+            .from('profiles')
+            .update({ ...updates, updated_at: new Date().toISOString() })
+            .eq('id', user.id)
+        }
         
         const locale = profile?.locale || 'nl'
         const response = NextResponse.redirect(`${origin}${next}`)
