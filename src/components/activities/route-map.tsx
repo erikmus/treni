@@ -4,7 +4,7 @@ import { useRef, useEffect, useState, useMemo } from "react";
 import dynamic from "next/dynamic";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-const MAPBOX_TOKEN = "pk.eyJ1IjoiZXJpa211c3dpbmUiLCJhIjoiY21qYWVyazBoMDA1MDNtcjY0ajN2c3J1MiJ9.ST1TRKU7y4ZkLIN-fh3OKA";
+const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
 
 interface Trackpoint {
   lat: number;
