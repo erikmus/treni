@@ -262,7 +262,20 @@
       "preferredDays": "Voorkeursdagen voor trainen",
       "preferredDaysHint": "Deze dagen worden gebruikt bij het genereren van trainingsschema's",
       "profileUpdated": "Profiel bijgewerkt",
-      "errorSaving": "Er ging iets mis bij het opslaan"
+      "errorSaving": "Er ging iets mis bij het opslaan",
+      "linkedAccounts": "Gekoppelde accounts",
+      "linkedAccountsHint": "Koppel extra accounts om sneller in te loggen",
+      "connected": "Verbonden",
+      "notConnected": "Niet gekoppeld",
+      "link": "Koppelen",
+      "unlink": "Ontkoppelen",
+      "emailPassword": "E-mail & wachtwoord",
+      "primary": "Primair",
+      "googleLinked": "Google account gekoppeld",
+      "googleUnlinked": "Google account ontkoppeld",
+      "errorLinkingGoogle": "Er ging iets mis bij het koppelen van Google",
+      "errorUnlinkingGoogle": "Er ging iets mis bij het ontkoppelen van Google",
+      "cannotUnlinkOnly": "Je kunt je enige inlogmethode niet ontkoppelen"
     },
     "preferences": {
       "title": "Voorkeuren",

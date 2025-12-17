@@ -262,7 +262,20 @@
       "preferredDays": "Preferred training days",
       "preferredDaysHint": "These days are used when generating training plans",
       "profileUpdated": "Profile updated",
-      "errorSaving": "Something went wrong while saving"
+      "errorSaving": "Something went wrong while saving",
+      "linkedAccounts": "Linked accounts",
+      "linkedAccountsHint": "Link additional accounts for faster login",
+      "connected": "Connected",
+      "notConnected": "Not connected",
+      "link": "Link",
+      "unlink": "Unlink",
+      "emailPassword": "Email & password",
+      "primary": "Primary",
+      "googleLinked": "Google account linked",
+      "googleUnlinked": "Google account unlinked",
+      "errorLinkingGoogle": "Something went wrong while linking Google",
+      "errorUnlinkingGoogle": "Something went wrong while unlinking Google",
+      "cannotUnlinkOnly": "You cannot unlink your only login method"
     },
     "preferences": {
       "title": "Preferences",
