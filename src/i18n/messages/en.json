@@ -1,0 +1,326 @@
+{
+  "common": {
+    "appName": "Treni",
+    "tagline": "Train smarter, run faster",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "searchPlaceholder": "Search...",
+    "filter": "Filter",
+    "sort": "Sort",
+    "viewAll": "View all",
+    "learnMore": "Learn more",
+    "notifications": "Notifications",
+    "help": "Help",
+    "user": "User",
+    "saveChanges": "Save changes",
+    "saving": "Saving..."
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "trainingPlan": "Training plan",
+    "workouts": "Workouts",
+    "plans": "Plans",
+    "activities": "Activities",
+    "statistics": "Statistics",
+    "settings": "Settings",
+    "profile": "Profile",
+    "integrations": "Integrations",
+    "billing": "Subscription",
+    "logout": "Log out",
+    "newPlan": "New plan",
+    "connectGarmin": "Connect Garmin",
+    "addActivity": "Add activity"
+  },
+  "landing": {
+    "hero": {
+      "title": "Your personal running coach",
+      "subtitle": "Personalized training plans that adapt to your life and goals. From 5K to marathon.",
+      "cta": "Start free",
+      "ctaSecondary": "See how it works"
+    },
+    "features": {
+      "title": "Why Treni?",
+      "subtitle": "Everything you need to reach your running goals",
+      "ai": {
+        "title": "AI-powered plans",
+        "description": "Our AI analyzes your level, availability, and goals to create the perfect training plan."
+      },
+      "adaptive": {
+        "title": "Adaptive planning",
+        "description": "Missed a workout? No problem. Your plan automatically adjusts based on your actual activities."
+      },
+      "garmin": {
+        "title": "Garmin integration",
+        "description": "Sync your workouts directly with your Garmin watch. Completed activities are automatically imported."
+      },
+      "goals": {
+        "title": "Every goal",
+        "description": "Whether you're training for your first 5K or chasing a marathon PR - Treni has a plan for you."
+      }
+    },
+    "goals": {
+      "title": "Choose your goal",
+      "subtitle": "From beginner to experienced runner",
+      "5k": "5 kilometers",
+      "10k": "10 kilometers",
+      "15k": "15 kilometers",
+      "halfMarathon": "Half marathon",
+      "marathon": "Marathon",
+      "fitness": "Stay fit"
+    },
+    "howItWorks": {
+      "title": "How does it work?",
+      "step1": {
+        "title": "Create your profile",
+        "description": "Tell us about your experience, availability, and goals."
+      },
+      "step2": {
+        "title": "Receive your plan",
+        "description": "Our AI creates a personalized training plan tailored to you."
+      },
+      "step3": {
+        "title": "Train & sync",
+        "description": "Follow your workouts and sync with Garmin for automatic adjustments."
+      },
+      "step4": {
+        "title": "Reach your goal",
+        "description": "Run your race with confidence and hit your personal record."
+      }
+    },
+    "testimonials": {
+      "title": "What runners say"
+    },
+    "pricing": {
+      "title": "Simple pricing",
+      "subtitle": "Start free, upgrade when you want",
+      "free": {
+        "name": "Free",
+        "price": "€0",
+        "period": "forever",
+        "features": [
+          "1 active training plan",
+          "Basic workouts",
+          "Manual activity logging"
+        ]
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "€9.99",
+        "period": "per month",
+        "features": [
+          "Unlimited plans",
+          "Garmin sync",
+          "AI adjustments",
+          "Detailed statistics",
+          "Priority support"
+        ]
+      }
+    },
+    "cta": {
+      "title": "Ready to start?",
+      "subtitle": "Create your personal training plan today",
+      "button": "Start for free"
+    },
+    "footer": {
+      "description": "The smartest way to train for your running goals.",
+      "product": "Product",
+      "features": "Features",
+      "pricing": "Pricing",
+      "company": "Company",
+      "about": "About",
+      "contact": "Contact",
+      "legal": "Legal",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "copyright": "© {year} Treni. All rights reserved."
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Log in to your account",
+      "email": "Email address",
+      "password": "Password",
+      "submit": "Log in",
+      "forgotPassword": "Forgot password?",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "orContinueWith": "Or continue with"
+    },
+    "signup": {
+      "title": "Create account",
+      "subtitle": "Start training today",
+      "name": "Full name",
+      "email": "Email address",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "submit": "Create account",
+      "hasAccount": "Already have an account?",
+      "login": "Log in",
+      "terms": "By signing up, you agree to our",
+      "termsLink": "terms",
+      "and": "and",
+      "privacyLink": "privacy policy"
+    },
+    "errors": {
+      "invalidCredentials": "Invalid credentials",
+      "emailInUse": "This email is already in use",
+      "weakPassword": "Password must be at least 8 characters",
+      "passwordMismatch": "Passwords do not match"
+    }
+  },
+  "dashboard": {
+    "welcome": "Welcome back, {name}!",
+    "todayWorkout": "Today's workout",
+    "noWorkoutToday": "No workout scheduled for today",
+    "upcomingWorkouts": "Upcoming workouts",
+    "recentActivities": "Recent activities",
+    "weeklyProgress": "Weekly progress",
+    "stats": {
+      "distance": "Distance",
+      "time": "Time",
+      "workouts": "Workouts",
+      "streak": "Streak"
+    },
+    "activePlan": "Active plan",
+    "noPlan": "No active plan",
+    "createPlan": "Create a plan",
+    "viewPlan": "View plan"
+  },
+  "workouts": {
+    "types": {
+      "easy_run": "Easy run",
+      "long_run": "Long run",
+      "tempo_run": "Tempo run",
+      "interval": "Intervals",
+      "fartlek": "Fartlek",
+      "recovery": "Recovery",
+      "hill_training": "Hill training",
+      "race_pace": "Race pace",
+      "cross_training": "Cross-training",
+      "rest": "Rest"
+    },
+    "status": {
+      "scheduled": "Scheduled",
+      "completed": "Completed",
+      "skipped": "Skipped",
+      "modified": "Modified"
+    },
+    "details": {
+      "duration": "Duration",
+      "distance": "Distance",
+      "pace": "Pace",
+      "heartRate": "Heart rate zone"
+    }
+  },
+  "plans": {
+    "create": {
+      "title": "New training plan",
+      "selectGoal": "Select your goal",
+      "selectDate": "When is your event?",
+      "targetTime": "Target time (optional)",
+      "experience": "What is your level?",
+      "availability": "How many hours per week can you train?",
+      "preferredDays": "Which days do you prefer to train?"
+    },
+    "status": {
+      "draft": "Draft",
+      "active": "Active",
+      "paused": "Paused",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "profile": {
+      "title": "Profile",
+      "subtitle": "Manage your personal details and preferences",
+      "name": "Name",
+      "fullName": "Full name",
+      "email": "Email",
+      "emailHint": "Your email address cannot be changed",
+      "avatar": "Profile photo",
+      "noName": "No name",
+      "language": "Language",
+      "basicInfo": "Basic information",
+      "trainingPreferences": "Training preferences",
+      "experienceLevel": "Experience level",
+      "selectLevel": "Select your level",
+      "availableHours": "Available hours per week",
+      "hoursPerWeek": "{hours} hours per week",
+      "preferredDays": "Preferred training days",
+      "preferredDaysHint": "These days are used when generating training plans",
+      "profileUpdated": "Profile updated",
+      "errorSaving": "Something went wrong while saving"
+    },
+    "preferences": {
+      "title": "Preferences",
+      "language": "Language",
+      "units": "Units",
+      "metric": "Metric (km)",
+      "imperial": "Imperial (mi)"
+    },
+    "integrations": {
+      "title": "Integrations",
+      "garmin": {
+        "title": "Garmin Connect",
+        "connected": "Connected",
+        "notConnected": "Not connected",
+        "connect": "Connect",
+        "disconnect": "Disconnect"
+      }
+    },
+    "notifications": {
+      "title": "Notifications",
+      "email": "Email notifications",
+      "push": "Push notifications",
+      "workoutReminders": "Workout reminders"
+    },
+    "danger": {
+      "title": "Danger zone",
+      "deleteAccount": "Delete account",
+      "deleteWarning": "This action cannot be undone."
+    }
+  },
+  "experienceLevels": {
+    "beginner": "Beginner",
+    "beginnerDesc": "0-6 months experience",
+    "intermediate": "Intermediate",
+    "intermediateDesc": "6 months - 2 years",
+    "advanced": "Advanced",
+    "advancedDesc": "2+ years experience",
+    "elite": "Elite",
+    "eliteDesc": "Competition level"
+  },
+  "weekDays": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  },
+  "units": {
+    "km": "km",
+    "mi": "mi",
+    "min": "min",
+    "sec": "sec",
+    "hour": "hour",
+    "bpm": "bpm",
+    "perKm": "/km",
+    "perMi": "/mi"
+  }
+}
+

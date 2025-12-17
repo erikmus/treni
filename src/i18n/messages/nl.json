@@ -1,0 +1,326 @@
+{
+  "common": {
+    "appName": "Treni",
+    "tagline": "Train slimmer, loop harder",
+    "loading": "Laden...",
+    "error": "Er is iets misgegaan",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "delete": "Verwijderen",
+    "edit": "Bewerken",
+    "create": "Aanmaken",
+    "back": "Terug",
+    "next": "Volgende",
+    "previous": "Vorige",
+    "search": "Zoeken",
+    "searchPlaceholder": "Zoeken...",
+    "filter": "Filteren",
+    "sort": "Sorteren",
+    "viewAll": "Bekijk alles",
+    "learnMore": "Meer informatie",
+    "notifications": "Notificaties",
+    "help": "Help",
+    "user": "Gebruiker",
+    "saveChanges": "Wijzigingen opslaan",
+    "saving": "Opslaan..."
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "trainingPlan": "Trainingsschema",
+    "workouts": "Workouts",
+    "plans": "Schema's",
+    "activities": "Activiteiten",
+    "statistics": "Statistieken",
+    "settings": "Instellingen",
+    "profile": "Profiel",
+    "integrations": "Integraties",
+    "billing": "Abonnement",
+    "logout": "Uitloggen",
+    "newPlan": "Nieuw schema",
+    "connectGarmin": "Garmin koppelen",
+    "addActivity": "Activiteit toevoegen"
+  },
+  "landing": {
+    "hero": {
+      "title": "Jouw persoonlijke hardloopcoach",
+      "subtitle": "Gepersonaliseerde trainingsschema's die zich aanpassen aan jouw leven en doelen. Van 5km tot marathon.",
+      "cta": "Start gratis",
+      "ctaSecondary": "Bekijk hoe het werkt"
+    },
+    "features": {
+      "title": "Waarom Treni?",
+      "subtitle": "Alles wat je nodig hebt om je hardloopdoelen te bereiken",
+      "ai": {
+        "title": "AI-gedreven schema's",
+        "description": "Onze AI analyseert je niveau, beschikbaarheid en doelen om het perfecte trainingsschema te maken."
+      },
+      "adaptive": {
+        "title": "Adaptieve planning",
+        "description": "Gemiste training? Geen probleem. Je schema past zich automatisch aan op basis van je werkelijke activiteiten."
+      },
+      "garmin": {
+        "title": "Garmin integratie",
+        "description": "Sync je trainingen direct met je Garmin horloge. Voltooide activiteiten worden automatisch geïmporteerd."
+      },
+      "goals": {
+        "title": "Elk doel",
+        "description": "Of je nu traint voor je eerste 5km of een marathon PR najaagt - Treni heeft een schema voor jou."
+      }
+    },
+    "goals": {
+      "title": "Kies je doel",
+      "subtitle": "Van beginner tot ervaren loper",
+      "5k": "5 kilometer",
+      "10k": "10 kilometer",
+      "15k": "15 kilometer",
+      "halfMarathon": "Halve marathon",
+      "marathon": "Marathon",
+      "fitness": "Fit blijven"
+    },
+    "howItWorks": {
+      "title": "Hoe werkt het?",
+      "step1": {
+        "title": "Maak je profiel",
+        "description": "Vertel ons over je ervaring, beschikbaarheid en doelen."
+      },
+      "step2": {
+        "title": "Ontvang je schema",
+        "description": "Onze AI maakt een gepersonaliseerd trainingsschema op maat."
+      },
+      "step3": {
+        "title": "Train & sync",
+        "description": "Volg je trainingen en sync met Garmin voor automatische aanpassingen."
+      },
+      "step4": {
+        "title": "Bereik je doel",
+        "description": "Loop je race met vertrouwen en haal je persoonlijk record."
+      }
+    },
+    "testimonials": {
+      "title": "Wat lopers zeggen"
+    },
+    "pricing": {
+      "title": "Eenvoudige prijzen",
+      "subtitle": "Start gratis, upgrade wanneer je wilt",
+      "free": {
+        "name": "Gratis",
+        "price": "€0",
+        "period": "voor altijd",
+        "features": [
+          "1 actief trainingsschema",
+          "Basis trainingen",
+          "Handmatige activiteiten loggen"
+        ]
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "€9,99",
+        "period": "per maand",
+        "features": [
+          "Onbeperkte schema's",
+          "Garmin sync",
+          "AI-aanpassingen",
+          "Gedetailleerde statistieken",
+          "Prioriteit support"
+        ]
+      }
+    },
+    "cta": {
+      "title": "Klaar om te starten?",
+      "subtitle": "Maak vandaag nog je persoonlijke trainingsschema",
+      "button": "Gratis beginnen"
+    },
+    "footer": {
+      "description": "De slimste manier om te trainen voor je hardloopdoelen.",
+      "product": "Product",
+      "features": "Functies",
+      "pricing": "Prijzen",
+      "company": "Bedrijf",
+      "about": "Over ons",
+      "contact": "Contact",
+      "legal": "Juridisch",
+      "privacy": "Privacy",
+      "terms": "Voorwaarden",
+      "copyright": "© {year} Treni. Alle rechten voorbehouden."
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welkom terug",
+      "subtitle": "Log in op je account",
+      "email": "E-mailadres",
+      "password": "Wachtwoord",
+      "submit": "Inloggen",
+      "forgotPassword": "Wachtwoord vergeten?",
+      "noAccount": "Nog geen account?",
+      "signUp": "Registreren",
+      "orContinueWith": "Of ga verder met"
+    },
+    "signup": {
+      "title": "Account aanmaken",
+      "subtitle": "Start vandaag met trainen",
+      "name": "Volledige naam",
+      "email": "E-mailadres",
+      "password": "Wachtwoord",
+      "confirmPassword": "Bevestig wachtwoord",
+      "submit": "Account aanmaken",
+      "hasAccount": "Heb je al een account?",
+      "login": "Inloggen",
+      "terms": "Door je te registreren ga je akkoord met onze",
+      "termsLink": "voorwaarden",
+      "and": "en",
+      "privacyLink": "privacybeleid"
+    },
+    "errors": {
+      "invalidCredentials": "Ongeldige inloggegevens",
+      "emailInUse": "Dit e-mailadres is al in gebruik",
+      "weakPassword": "Wachtwoord moet minimaal 8 tekens bevatten",
+      "passwordMismatch": "Wachtwoorden komen niet overeen"
+    }
+  },
+  "dashboard": {
+    "welcome": "Welkom terug, {name}!",
+    "todayWorkout": "Training van vandaag",
+    "noWorkoutToday": "Geen training gepland voor vandaag",
+    "upcomingWorkouts": "Komende trainingen",
+    "recentActivities": "Recente activiteiten",
+    "weeklyProgress": "Wekelijkse voortgang",
+    "stats": {
+      "distance": "Afstand",
+      "time": "Tijd",
+      "workouts": "Trainingen",
+      "streak": "Streak"
+    },
+    "activePlan": "Actief schema",
+    "noPlan": "Geen actief schema",
+    "createPlan": "Maak een schema",
+    "viewPlan": "Bekijk schema"
+  },
+  "workouts": {
+    "types": {
+      "easy_run": "Rustige duurloop",
+      "long_run": "Lange duurloop",
+      "tempo_run": "Tempo",
+      "interval": "Interval",
+      "fartlek": "Fartlek",
+      "recovery": "Herstel",
+      "hill_training": "Heuveltraining",
+      "race_pace": "Wedstrijdtempo",
+      "cross_training": "Cross-training",
+      "rest": "Rust"
+    },
+    "status": {
+      "scheduled": "Gepland",
+      "completed": "Voltooid",
+      "skipped": "Overgeslagen",
+      "modified": "Aangepast"
+    },
+    "details": {
+      "duration": "Duur",
+      "distance": "Afstand",
+      "pace": "Tempo",
+      "heartRate": "Hartslag zone"
+    }
+  },
+  "plans": {
+    "create": {
+      "title": "Nieuw trainingsschema",
+      "selectGoal": "Selecteer je doel",
+      "selectDate": "Wanneer is je evenement?",
+      "targetTime": "Doeltijd (optioneel)",
+      "experience": "Wat is je niveau?",
+      "availability": "Hoeveel uur per week kun je trainen?",
+      "preferredDays": "Op welke dagen train je het liefst?"
+    },
+    "status": {
+      "draft": "Concept",
+      "active": "Actief",
+      "paused": "Gepauzeerd",
+      "completed": "Voltooid",
+      "cancelled": "Geannuleerd"
+    }
+  },
+  "settings": {
+    "title": "Instellingen",
+    "profile": {
+      "title": "Profiel",
+      "subtitle": "Pas je persoonlijke gegevens en voorkeuren aan",
+      "name": "Naam",
+      "fullName": "Volledige naam",
+      "email": "E-mail",
+      "emailHint": "Je e-mailadres kan niet worden gewijzigd",
+      "avatar": "Profielfoto",
+      "noName": "Geen naam",
+      "language": "Taal",
+      "basicInfo": "Basisgegevens",
+      "trainingPreferences": "Trainingsvoorkeuren",
+      "experienceLevel": "Ervaringsniveau",
+      "selectLevel": "Selecteer je niveau",
+      "availableHours": "Beschikbare uren per week",
+      "hoursPerWeek": "{hours} uur per week",
+      "preferredDays": "Voorkeursdagen voor trainen",
+      "preferredDaysHint": "Deze dagen worden gebruikt bij het genereren van trainingsschema's",
+      "profileUpdated": "Profiel bijgewerkt",
+      "errorSaving": "Er ging iets mis bij het opslaan"
+    },
+    "preferences": {
+      "title": "Voorkeuren",
+      "language": "Taal",
+      "units": "Eenheden",
+      "metric": "Metrisch (km)",
+      "imperial": "Imperiaal (mi)"
+    },
+    "integrations": {
+      "title": "Integraties",
+      "garmin": {
+        "title": "Garmin Connect",
+        "connected": "Verbonden",
+        "notConnected": "Niet verbonden",
+        "connect": "Verbinden",
+        "disconnect": "Ontkoppelen"
+      }
+    },
+    "notifications": {
+      "title": "Notificaties",
+      "email": "E-mail notificaties",
+      "push": "Push notificaties",
+      "workoutReminders": "Training herinneringen"
+    },
+    "danger": {
+      "title": "Gevarenzone",
+      "deleteAccount": "Account verwijderen",
+      "deleteWarning": "Deze actie kan niet ongedaan worden gemaakt."
+    }
+  },
+  "experienceLevels": {
+    "beginner": "Beginner",
+    "beginnerDesc": "0-6 maanden ervaring",
+    "intermediate": "Gevorderd",
+    "intermediateDesc": "6 maanden - 2 jaar",
+    "advanced": "Ervaren",
+    "advancedDesc": "2+ jaar ervaring",
+    "elite": "Elite",
+    "eliteDesc": "Competitieniveau"
+  },
+  "weekDays": {
+    "monday": "Maandag",
+    "tuesday": "Dinsdag",
+    "wednesday": "Woensdag",
+    "thursday": "Donderdag",
+    "friday": "Vrijdag",
+    "saturday": "Zaterdag",
+    "sunday": "Zondag"
+  },
+  "units": {
+    "km": "km",
+    "mi": "mi",
+    "min": "min",
+    "sec": "sec",
+    "hour": "uur",
+    "bpm": "bpm",
+    "perKm": "/km",
+    "perMi": "/mi"
+  }
+}
+
