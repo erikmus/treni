@@ -61,7 +61,7 @@ export function GoalsSection() {
                 <p>{t("schedule", { 
                   weeks: goal.ongoing 
                     ? t("ongoing") 
-                    : t("weeks", { count: goal.weeksCount })
+                    : t("weeks", { count: goal.weeksCount ?? 0 })
                 })}</p>
               </div>
 
