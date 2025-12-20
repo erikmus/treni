@@ -7,6 +7,7 @@ import {
   stravaLapsToSplitsData,
   type StravaActivity 
 } from "@/lib/strava/client";
+import { createNotification } from "@/lib/notifications/create-notification";
 import type { TablesInsert, Json } from "@/types/database";
 
 export async function POST(request: Request) {
@@ -83,6 +84,25 @@ export async function POST(request: Request) {
         console.error(`Error syncing activity ${activity.id}:`, error);
         results.errors.push(`Failed to sync "${activity.name}": ${error instanceof Error ? error.message : "Unknown error"}`);
       }
+    }
+
+    // Create notification for synced activities
+    if (results.synced > 0) {
+      await createNotification({
+        supabase,
+        userId: user.id,
+        type: "activity_synced",
+        title: results.synced === 1 
+          ? "Strava activiteit gesynchroniseerd" 
+          : `${results.synced} Strava activiteiten gesynchroniseerd`,
+        message: results.skipped > 0 
+          ? `${results.skipped} ${results.skipped === 1 ? 'activiteit' : 'activiteiten'} overgeslagen (al geïmporteerd)`
+          : undefined,
+        data: {
+          synced: results.synced,
+          skipped: results.skipped,
+        },
+      });
     }
 
     return NextResponse.json({

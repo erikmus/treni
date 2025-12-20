@@ -8,7 +8,9 @@ import {
 } from "@/components/ui/sidebar"
 import { SearchProvider } from "@/components/search/search-provider"
 import { StravaWelcome } from "@/components/dashboard/strava-welcome"
+import { DistanceUnitWrapper } from "@/components/providers/distance-unit-wrapper"
 import { createClient } from "@/lib/supabase/server"
+import type { DistanceUnit } from "@/types/database"
 
 export default async function DashboardLayout({
   children,
@@ -30,36 +32,41 @@ export default async function DashboardLayout({
     .eq("id", user.id)
     .single()
 
+  // Get distance unit preference with fallback to km
+  const distanceUnit = (profile?.distance_unit as DistanceUnit) || "km"
+
   return (
-    <SearchProvider>
-      <SidebarProvider
-        style={
-          {
-            "--sidebar-width": "calc(var(--spacing) * 72)",
-            "--header-height": "calc(var(--spacing) * 12)",
-          } as React.CSSProperties
-        }
-      >
-        <AppSidebar 
-          variant="inset" 
-          user={{
-            name: profile?.full_name || null,
-            email: profile?.email || user.email || null,
-            avatar_url: profile?.avatar_url || null,
-          }}
-        />
-        <SidebarInset>
-          <SiteHeader userName={profile?.full_name || "daar"} />
-          <div className="flex flex-1 flex-col">
-            <Suspense fallback={null}>
-              <StravaWelcome />
-            </Suspense>
-            <div className="@container/main flex flex-1 flex-col gap-2">
-              {children}
+    <DistanceUnitWrapper unit={distanceUnit}>
+      <SearchProvider>
+        <SidebarProvider
+          style={
+            {
+              "--sidebar-width": "calc(var(--spacing) * 72)",
+              "--header-height": "calc(var(--spacing) * 12)",
+            } as React.CSSProperties
+          }
+        >
+          <AppSidebar 
+            variant="inset" 
+            user={{
+              name: profile?.full_name || null,
+              email: profile?.email || user.email || null,
+              avatar_url: profile?.avatar_url || null,
+            }}
+          />
+          <SidebarInset>
+            <SiteHeader userName={profile?.full_name || "daar"} locale={profile?.locale || "nl"} />
+            <div className="flex flex-1 flex-col">
+              <Suspense fallback={null}>
+                <StravaWelcome />
+              </Suspense>
+              <div className="@container/main flex flex-1 flex-col gap-2">
+                {children}
+              </div>
             </div>
-          </div>
-        </SidebarInset>
-      </SidebarProvider>
-    </SearchProvider>
+          </SidebarInset>
+        </SidebarProvider>
+      </SearchProvider>
+    </DistanceUnitWrapper>
   )
 }

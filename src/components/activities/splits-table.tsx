@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 interface Split {
   lapNumber: number;
@@ -25,13 +26,6 @@ interface SplitsTableProps {
   splits: Split[];
 }
 
-function formatPace(secondsPerKm: number | null): string {
-  if (!secondsPerKm) return "-";
-  const mins = Math.floor(secondsPerKm / 60);
-  const secs = Math.round(secondsPerKm % 60);
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
-}
-
 function formatDuration(seconds: number): string {
   const mins = Math.floor(seconds / 60);
   const secs = Math.round(seconds % 60);
@@ -39,17 +33,22 @@ function formatDuration(seconds: number): string {
 }
 
 export function SplitsTable({ splits }: SplitsTableProps) {
+  const { formatDistanceFromMeters, formatPace, unit, paceUnitLabel } = useDistanceUnit();
+  
   if (splits.length === 0) return null;
 
   const hasHeartRate = splits.some(s => s.avgHeartRate);
   const hasCadence = splits.some(s => s.cadence);
+  
+  // Dynamic label based on unit
+  const lapLabel = unit === "mi" ? "mile" : "kilometer";
 
   return (
     <div className="bg-card rounded-xl border overflow-hidden">
       <div className="p-6 pb-4">
         <h2 className="text-lg font-semibold">Splits</h2>
         <p className="text-sm text-muted-foreground mt-1">
-          Overzicht per kilometer/lap
+          Overzicht per {lapLabel}/lap
         </p>
       </div>
       <div className="overflow-x-auto">
@@ -68,10 +67,10 @@ export function SplitsTable({ splits }: SplitsTableProps) {
             {splits.map((split) => (
               <TableRow key={split.lapNumber}>
                 <TableCell className="font-medium">{split.lapNumber}</TableCell>
-                <TableCell>{(split.distanceMeters / 1000).toFixed(2)} km</TableCell>
+                <TableCell>{formatDistanceFromMeters(split.distanceMeters, 2)}</TableCell>
                 <TableCell>{formatDuration(split.durationSeconds)}</TableCell>
                 <TableCell className="font-mono">
-                  {formatPace(split.paceSecPerKm)} /km
+                  {formatPace(split.paceSecPerKm)}
                 </TableCell>
                 {hasHeartRate && (
                   <TableCell>

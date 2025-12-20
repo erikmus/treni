@@ -1,4 +1,4 @@
-import { Watch, Activity, Link2, CheckCircle2, XCircle, RefreshCw } from "lucide-react";
+import { Watch, Activity, Link2, CheckCircle2, XCircle } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,11 +18,10 @@ export default async function IntegrationsPage() {
   // Fetch user profile to check connections
   const { data: profile } = await supabase
     .from("profiles")
-    .select("garmin_user_id, garmin_access_token, strava_athlete_id, strava_access_token")
+    .select("strava_athlete_id, strava_access_token")
     .eq("id", user.id)
     .single();
 
-  const isGarminConnected = !!(profile?.garmin_user_id && profile?.garmin_access_token);
   const isStravaConnected = !!(profile?.strava_athlete_id && profile?.strava_access_token);
 
   return (
@@ -81,7 +80,7 @@ export default async function IntegrationsPage() {
         </div>
 
         {/* Garmin Connect */}
-        <div className="bg-card border rounded-xl p-6">
+        <div className="bg-card border rounded-xl p-6 opacity-75">
           <div className="flex items-start gap-4">
             <div className="p-3 rounded-xl bg-blue-500/10">
               <Watch className="h-6 w-6 text-blue-600" />
@@ -89,17 +88,9 @@ export default async function IntegrationsPage() {
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <h3 className="font-semibold">{t("garmin.title")}</h3>
-                {isGarminConnected ? (
-                  <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50">
-                    <CheckCircle2 className="h-3 w-3 mr-1" />
-                    {t("garmin.connected")}
-                  </Badge>
-                ) : (
-                  <Badge variant="outline" className="text-muted-foreground">
-                    <XCircle className="h-3 w-3 mr-1" />
-                    {t("garmin.notConnected")}
-                  </Badge>
-                )}
+                <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50">
+                  {t("garmin.comingSoon")}
+                </Badge>
               </div>
               <p className="text-muted-foreground text-sm mt-1">
                 {t("garmin.description")}
@@ -107,30 +98,28 @@ export default async function IntegrationsPage() {
               
               <ul className="mt-3 space-y-1 text-sm text-muted-foreground">
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-                  {t("garmin.features.import")}
+                  <XCircle className="h-3.5 w-3.5 text-muted-foreground/50" />
+                  <span className="text-muted-foreground/70">{t("garmin.features.import")}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
                   {t("garmin.features.export")}
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-                  {t("garmin.features.heartRate")}
+                  <XCircle className="h-3.5 w-3.5 text-muted-foreground/50" />
+                  <span className="text-muted-foreground/70">{t("garmin.features.heartRate")}</span>
                 </li>
               </ul>
 
+              <p className="mt-3 text-xs text-muted-foreground">
+                {t("garmin.exportHint")}
+              </p>
+
               <div className="mt-4">
-                {isGarminConnected ? (
-                  <Button variant="outline" size="sm">
-                    {t("garmin.disconnect")}
-                  </Button>
-                ) : (
-                  <Button size="sm" disabled>
-                    <Link2 className="h-4 w-4 mr-2" />
-                    {t("garmin.connectWith")}
-                  </Button>
-                )}
+                <Button size="sm" disabled>
+                  <Link2 className="h-4 w-4 mr-2" />
+                  {t("garmin.comingSoon")}
+                </Button>
               </div>
             </div>
           </div>

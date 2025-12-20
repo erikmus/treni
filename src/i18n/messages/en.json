@@ -80,8 +80,8 @@
         "description": "Missed a workout? No problem. Your plan automatically adjusts based on your actual activities."
       },
       "garmin": {
-        "title": "Garmin integration",
-        "description": "Sync your workouts directly with your Garmin watch. Completed activities are automatically imported."
+        "title": "Garmin export",
+        "description": "Export your workouts to your Garmin watch. Full sync coming soon."
       },
       "goals": {
         "title": "Every goal",
@@ -130,8 +130,8 @@
         "description": "Our AI creates a personalized training plan tailored to you."
       },
       "step3": {
-        "title": "Train & sync",
-        "description": "Follow your workouts and sync with Garmin for automatic adjustments."
+        "title": "Train & track",
+        "description": "Follow your workouts and export them to your Garmin or Strava."
       },
       "step4": {
         "title": "Reach your goal",
@@ -442,7 +442,11 @@
       "errorUploadingAvatar": "Something went wrong while uploading",
       "errorRemovingAvatar": "Something went wrong while removing",
       "invalidFileType": "Invalid file type. Use JPG, PNG, GIF or WebP.",
-      "fileTooLarge": "File is too large. Maximum is 5MB."
+      "fileTooLarge": "File is too large. Maximum is 5MB.",
+      "distanceUnit": "Distance unit",
+      "kilometers": "Kilometers (km)",
+      "miles": "Miles (mi)",
+      "distanceUnitHint": "Choose how distances are displayed in the app"
     },
     "preferences": {
       "title": "Preferences",
@@ -456,17 +460,19 @@
       "subtitle": "Connect external services to sync your training data",
       "garmin": {
         "title": "Garmin Connect",
-        "description": "Sync activities and send workouts to your Garmin watch",
+        "description": "Export workouts to your Garmin watch. Full sync coming soon.",
         "connected": "Connected",
-        "notConnected": "Not connected",
+        "notConnected": "Coming soon",
         "connect": "Connect",
         "disconnect": "Disconnect",
-        "connectWith": "Connect with Garmin",
+        "connectWith": "Coming soon",
+        "comingSoon": "Coming soon",
         "features": {
-          "import": "Automatically import activities",
+          "import": "Automatically import activities (coming soon)",
           "export": "Send workouts to watch",
-          "heartRate": "Sync heart rate zones"
-        }
+          "heartRate": "Sync heart rate zones (coming soon)"
+        },
+        "exportHint": "You can already download workouts and manually upload them to Garmin Connect"
       },
       "strava": {
         "title": "Strava",
@@ -733,6 +739,20 @@
     "bpm": "bpm",
     "perKm": "/km",
     "perMi": "/mi"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No new notifications",
+    "loading": "Loading...",
+    "markAllRead": "Mark all as read",
+    "activityUploaded": "Activity uploaded",
+    "activitiesUploaded": "{count} activities uploaded",
+    "activitySynced": "Strava activity synced",
+    "activitiesSynced": "{count} Strava activities synced",
+    "skippedActivities": "{count} activity skipped | {count} activities skipped",
+    "workoutReminder": "Workout reminder",
+    "planCreated": "Training plan created",
+    "achievement": "Achievement unlocked"
   },
   "about": {
     "title": "About Treni",

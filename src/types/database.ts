@@ -247,6 +247,7 @@ export type Database = {
         Row: {
           avatar_url: string | null
           created_at: string
+          distance_unit: string
           email: string | null
           experience_level: string | null
           full_name: string | null
@@ -268,6 +269,7 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           created_at?: string
+          distance_unit?: string
           email?: string | null
           experience_level?: string | null
           full_name?: string | null
@@ -289,6 +291,7 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           created_at?: string
+          distance_unit?: string
           email?: string | null
           experience_level?: string | null
           full_name?: string | null
@@ -638,7 +641,20 @@ export type WorkoutTemplate = Tables<'workout_templates'>
 export type PlanTemplate = Tables<'plan_templates'>
 export type PlanTemplateWorkout = Tables<'plan_template_workouts'>
 
+// Notification type (manual definition since we just created the table)
+export type Notification = {
+  id: string
+  user_id: string
+  type: NotificationType
+  title: string
+  message: string | null
+  data: Json
+  read_at: string | null
+  created_at: string
+}
+
 // Enums
+export type DistanceUnit = 'km' | 'mi'
 export type ExperienceLevel = 'beginner' | 'intermediate' | 'advanced' | 'elite'
 export type GoalType = '5k' | '10k' | '15k' | 'half_marathon' | 'marathon' | 'fitness' | 'custom'
 export type WorkoutType = 'easy_run' | 'long_run' | 'tempo_run' | 'interval' | 'fartlek' | 'recovery' | 'hill_training' | 'race_pace' | 'cross_training' | 'rest'
@@ -647,3 +663,4 @@ export type PlanStatus = 'draft' | 'active' | 'paused' | 'completed' | 'cancelle
 export type ActivitySource = 'manual' | 'garmin' | 'strava' | 'import'
 export type ActivityType = 'run' | 'walk' | 'cross_training' | 'cycling' | 'swimming' | 'other'
 export type Feeling = 'great' | 'good' | 'okay' | 'tired' | 'exhausted'
+export type NotificationType = 'activity_uploaded' | 'activity_synced' | 'workout_reminder' | 'plan_created' | 'achievement'

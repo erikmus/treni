@@ -47,6 +47,7 @@ export default async function ProfilePage() {
           full_name: profile?.full_name || "",
           avatar_url: profile?.avatar_url || "",
           locale: profile?.locale || "nl",
+          distance_unit: profile?.distance_unit || "km",
           experience_level: profile?.experience_level || null,
           weekly_available_hours: profile?.weekly_available_hours || 5,
           preferred_run_days: profile?.preferred_run_days || ["tuesday", "thursday", "saturday"],

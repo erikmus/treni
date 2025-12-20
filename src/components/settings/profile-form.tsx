@@ -27,6 +27,7 @@ interface ProfileFormProps {
     full_name: string;
     avatar_url: string;
     locale: string;
+    distance_unit: string;
     experience_level: string | null;
     weekly_available_hours: number;
     preferred_run_days: string[];
@@ -49,6 +50,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
   const [formData, setFormData] = useState({
     full_name: profile.full_name,
     locale: profile.locale,
+    distance_unit: profile.distance_unit,
     experience_level: profile.experience_level || "",
     weekly_available_hours: profile.weekly_available_hours,
     preferred_run_days: profile.preferred_run_days,
@@ -239,6 +241,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
         .update({
           full_name: formData.full_name,
           locale: formData.locale,
+          distance_unit: formData.distance_unit,
           experience_level: formData.experience_level || null,
           weekly_available_hours: formData.weekly_available_hours,
           preferred_run_days: formData.preferred_run_days,
@@ -388,6 +391,25 @@ export function ProfileForm({ profile }: ProfileFormProps) {
                 <SelectItem value="en">English</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="distance_unit">{t("settings.profile.distanceUnit")}</Label>
+            <Select
+              value={formData.distance_unit}
+              onValueChange={(value) => setFormData({ ...formData, distance_unit: value })}
+            >
+              <SelectTrigger id="distance_unit">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="km">{t("settings.profile.kilometers")}</SelectItem>
+                <SelectItem value="mi">{t("settings.profile.miles")}</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-muted-foreground">
+              {t("settings.profile.distanceUnitHint")}
+            </p>
           </div>
         </div>
       </div>

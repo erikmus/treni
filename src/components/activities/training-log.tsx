@@ -15,6 +15,7 @@ import {
 } from "date-fns";
 import { nl } from "date-fns/locale";
 import { cn } from "@/lib/utils";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 interface Activity {
   id: string;
@@ -50,6 +51,8 @@ function getCircleSize(distanceKm: number, isMobile: boolean): string {
 }
 
 export function TrainingLog({ activities, weeksToShow = 52 }: TrainingLogProps) {
+  const { convertDistance, unitLabel } = useDistanceUnit();
+  
   // Generate weeks from now going back
   const weeks = useMemo(() => {
     const now = new Date();
@@ -155,10 +158,10 @@ export function TrainingLog({ activities, weeksToShow = 52 }: TrainingLogProps) 
                   <div className="text-xs text-muted-foreground">
                     {totalDistanceKm > 0 ? (
                       <span className="font-semibold text-foreground">
-                        {totalDistanceKm.toLocaleString("nl-NL", {
+                        {convertDistance(totalDistanceKm).toLocaleString("nl-NL", {
                           minimumFractionDigits: 1,
                           maximumFractionDigits: 1,
-                        })} km
+                        })} {unitLabel}
                       </span>
                     ) : (
                       <span className="text-muted-foreground/60">—</span>
@@ -183,6 +186,7 @@ export function TrainingLog({ activities, weeksToShow = 52 }: TrainingLogProps) 
                         <div className="flex flex-col items-center gap-0.5">
                           {dayActivities.map((activity) => {
                             const distanceKm = (Number(activity.distance_meters) || 0) / 1000;
+                            const displayDistance = convertDistance(distanceKm);
                             
                             return (
                               <Link
@@ -194,7 +198,7 @@ export function TrainingLog({ activities, weeksToShow = 52 }: TrainingLogProps) 
                                 )}
                                 title={activity.title || undefined}
                               >
-                                {distanceKm >= 1 ? `${Math.round(distanceKm)}` : distanceKm.toFixed(1)}
+                                {displayDistance >= 1 ? `${Math.round(displayDistance)}` : displayDistance.toFixed(1)}
                               </Link>
                             );
                           })}
@@ -229,10 +233,10 @@ export function TrainingLog({ activities, weeksToShow = 52 }: TrainingLogProps) 
                   </div>
                   {totalDistanceKm > 0 && (
                     <div className="text-xs font-bold text-emerald-600 mt-0.5">
-                      {totalDistanceKm.toLocaleString("nl-NL", {
+                      {convertDistance(totalDistanceKm).toLocaleString("nl-NL", {
                         minimumFractionDigits: 1,
                         maximumFractionDigits: 1,
-                      })} km
+                      })} {unitLabel}
                     </div>
                   )}
                 </div>
@@ -254,6 +258,7 @@ export function TrainingLog({ activities, weeksToShow = 52 }: TrainingLogProps) 
                         <div className="flex flex-col items-center">
                           {dayActivities.slice(0, 1).map((activity) => {
                             const distanceKm = (Number(activity.distance_meters) || 0) / 1000;
+                            const displayDistance = convertDistance(distanceKm);
                             
                             return (
                               <Link
@@ -264,7 +269,7 @@ export function TrainingLog({ activities, weeksToShow = 52 }: TrainingLogProps) 
                                   getCircleSize(distanceKm, true)
                                 )}
                               >
-                                {distanceKm >= 1 ? Math.round(distanceKm) : "·"}
+                                {displayDistance >= 1 ? Math.round(displayDistance) : "·"}
                               </Link>
                             );
                           })}

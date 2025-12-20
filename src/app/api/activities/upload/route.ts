@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { parseTCX, trackpointsToGpxData, lapsToSplitsData } from "@/lib/parsers/parse-tcx";
+import { createNotification } from "@/lib/notifications/create-notification";
 import type { TablesInsert, Json } from "@/types/database";
 
 export async function POST(request: NextRequest) {
@@ -117,6 +118,30 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ 
         error: errors[0] 
       }, { status: 400 });
+    }
+
+    // Create notification for uploaded activities
+    if (insertedActivities.length > 0) {
+      const firstActivity = insertedActivities[0];
+      const distanceKm = firstActivity.distance_meters 
+        ? (Number(firstActivity.distance_meters) / 1000).toFixed(1) 
+        : null;
+      
+      await createNotification({
+        supabase,
+        userId: user.id,
+        type: "activity_uploaded",
+        title: insertedActivities.length === 1 
+          ? "Activiteit geüpload" 
+          : `${insertedActivities.length} activiteiten geüpload`,
+        message: distanceKm 
+          ? `${firstActivity.title || "Training"} - ${distanceKm} km`
+          : firstActivity.title || "Training",
+        data: {
+          activity_id: firstActivity.id,
+          count: insertedActivities.length,
+        },
+      });
     }
 
     return NextResponse.json({

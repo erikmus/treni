@@ -3,7 +3,6 @@ import Link from "next/link";
 import { 
   Activity,
   Plus,
-  Watch,
   Upload,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,14 +24,14 @@ export default async function ActivitiesPage() {
     .eq("user_id", user.id)
     .order("started_at", { ascending: false });
 
-  // Check if user has Garmin connected
+  // Check if user has Strava connected
   const { data: profile } = await supabase
     .from("profiles")
-    .select("garmin_user_id")
+    .select("strava_athlete_id, strava_access_token")
     .eq("id", user.id)
     .single();
   
-  const hasGarminConnected = !!profile?.garmin_user_id;
+  const isStravaConnected = !!(profile?.strava_athlete_id && profile?.strava_access_token);
 
   if (!activities || activities.length === 0) {
     return (
@@ -55,19 +54,9 @@ export default async function ActivitiesPage() {
             </div>
             <h2 className="text-2xl font-bold mb-4">Nog geen activiteiten</h2>
             <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-              {hasGarminConnected 
-                ? "Je hebt nog geen activiteiten gesynchroniseerd van Garmin."
-                : "Koppel je Garmin horloge om je trainingen automatisch te synchroniseren, of voeg handmatig een activiteit toe."}
+              Voeg handmatig een activiteit toe of importeer een TCX bestand van Garmin Connect.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              {!hasGarminConnected && (
-                <Button variant="outline" asChild>
-                  <Link href="/dashboard/settings/integrations">
-                    <Watch className="mr-2 h-4 w-4" />
-                    Garmin koppelen
-                  </Link>
-                </Button>
-              )}
               <UploadTCXDialog
                 trigger={
                   <Button variant="outline">
@@ -126,18 +115,18 @@ export default async function ActivitiesPage() {
         <TrainingLog activities={activities} weeksToShow={52} />
       </div>
 
-      {/* Garmin Connection CTA */}
-      {!hasGarminConnected && (
-        <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-xl border border-blue-500/20 p-6">
+      {/* Strava Connection CTA */}
+      {!isStravaConnected && (
+        <div className="bg-gradient-to-r from-orange-500/10 to-amber-500/10 rounded-xl border border-orange-500/20 p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-blue-500/20">
-                <Watch className="h-6 w-6 text-blue-600" />
+              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-orange-500/20">
+                <Activity className="h-6 w-6 text-orange-600" />
               </div>
               <div>
-                <h3 className="font-semibold">Koppel je Garmin horloge</h3>
+                <h3 className="font-semibold">Koppel je Strava account</h3>
                 <p className="text-sm text-muted-foreground">
-                  Synchroniseer automatisch je trainingen en krijg gedetailleerde statistieken.
+                  Synchroniseer automatisch je trainingen vanuit Strava.
                 </p>
               </div>
             </div>

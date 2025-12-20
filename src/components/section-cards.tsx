@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { useDistanceUnit } from "@/hooks/use-distance-unit"
 
 interface StatsData {
   weeklyDistance: number
@@ -33,6 +34,7 @@ interface SectionCardsProps {
 export function SectionCards({ stats, hasPlan = true }: SectionCardsProps) {
   const t = useTranslations("sectionCards")
   const tCommon = useTranslations("common")
+  const { formatDistance } = useDistanceUnit()
   
   // Default to zeros if no stats provided
   const data = stats || {
@@ -91,7 +93,7 @@ export function SectionCards({ stats, hasPlan = true }: SectionCardsProps) {
             {t("distanceThisWeek")}
           </CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            {data.weeklyDistance.toFixed(1)} km
+            {formatDistance(data.weeklyDistance)}
           </CardTitle>
           <CardAction>
             {data.weeklyDistanceChange !== 0 ? (

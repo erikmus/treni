@@ -80,8 +80,8 @@
         "description": "Gemiste training? Geen probleem. Je schema past zich automatisch aan op basis van je werkelijke activiteiten."
       },
       "garmin": {
-        "title": "Garmin integratie",
-        "description": "Sync je trainingen direct met je Garmin horloge. Voltooide activiteiten worden automatisch geïmporteerd."
+        "title": "Garmin export",
+        "description": "Exporteer je workouts naar je Garmin horloge. Volledige sync komt binnenkort."
       },
       "goals": {
         "title": "Elk doel",
@@ -130,8 +130,8 @@
         "description": "Onze AI maakt een gepersonaliseerd trainingsschema op maat."
       },
       "step3": {
-        "title": "Train & sync",
-        "description": "Volg je trainingen en sync met Garmin voor automatische aanpassingen."
+        "title": "Train & volg",
+        "description": "Volg je trainingen en exporteer workouts naar je Garmin of Strava."
       },
       "step4": {
         "title": "Bereik je doel",
@@ -442,7 +442,11 @@
       "errorUploadingAvatar": "Er ging iets mis bij het uploaden",
       "errorRemovingAvatar": "Er ging iets mis bij het verwijderen",
       "invalidFileType": "Ongeldig bestandstype. Gebruik JPG, PNG, GIF of WebP.",
-      "fileTooLarge": "Bestand is te groot. Maximum is 5MB."
+      "fileTooLarge": "Bestand is te groot. Maximum is 5MB.",
+      "distanceUnit": "Afstandseenheid",
+      "kilometers": "Kilometers (km)",
+      "miles": "Mijlen (mi)",
+      "distanceUnitHint": "Kies hoe afstanden worden weergegeven in de app"
     },
     "preferences": {
       "title": "Voorkeuren",
@@ -456,17 +460,19 @@
       "subtitle": "Koppel externe diensten om je trainingsdata te synchroniseren",
       "garmin": {
         "title": "Garmin Connect",
-        "description": "Synchroniseer activiteiten en stuur workouts naar je Garmin horloge",
+        "description": "Exporteer workouts naar je Garmin horloge. Volledige sync komt binnenkort.",
         "connected": "Verbonden",
-        "notConnected": "Niet verbonden",
+        "notConnected": "Coming soon",
         "connect": "Verbinden",
         "disconnect": "Ontkoppelen",
-        "connectWith": "Koppelen met Garmin",
+        "connectWith": "Coming soon",
+        "comingSoon": "Coming soon",
         "features": {
-          "import": "Automatisch activiteiten importeren",
+          "import": "Automatisch activiteiten importeren (coming soon)",
           "export": "Workouts naar horloge sturen",
-          "heartRate": "Hartslag zones synchroniseren"
-        }
+          "heartRate": "Hartslag zones synchroniseren (coming soon)"
+        },
+        "exportHint": "Je kunt nu al workouts downloaden en handmatig uploaden naar Garmin Connect"
       },
       "strava": {
         "title": "Strava",
@@ -733,6 +739,20 @@
     "bpm": "bpm",
     "perKm": "/km",
     "perMi": "/mi"
+  },
+  "notifications": {
+    "title": "Notificaties",
+    "empty": "Geen nieuwe notificaties",
+    "loading": "Laden...",
+    "markAllRead": "Alles gelezen",
+    "activityUploaded": "Activiteit geüpload",
+    "activitiesUploaded": "{count} activiteiten geüpload",
+    "activitySynced": "Strava activiteit gesynchroniseerd",
+    "activitiesSynced": "{count} Strava activiteiten gesynchroniseerd",
+    "skippedActivities": "{count} activiteit overgeslagen | {count} activiteiten overgeslagen",
+    "workoutReminder": "Workout herinnering",
+    "planCreated": "Trainingsschema aangemaakt",
+    "achievement": "Prestatie behaald"
   },
   "about": {
     "title": "Over Treni",

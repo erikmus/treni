@@ -5,20 +5,12 @@ import { nl } from "date-fns/locale";
 import { 
   ArrowLeft,
   Calendar,
-  Clock, 
-  MapPin, 
-  Heart,
-  TrendingUp,
-  Flame,
-  Mountain,
-  Footprints,
-  Timer,
-  Trash2,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { ActivityVisualization } from "@/components/activities/activity-visualization";
+import { ActivityStats } from "@/components/activities/activity-stats";
 import { DeleteActivityButton } from "@/components/activities/delete-activity-button";
 import { SplitsTable } from "@/components/activities/splits-table";
 import { EditableActivityTitle } from "@/components/activities/editable-activity-title";
@@ -40,25 +32,6 @@ const activityTypeIcons: Record<string, string> = {
   swimming: "🏊",
   other: "💪",
 };
-
-function formatPace(secondsPerKm: number | null): string {
-  if (!secondsPerKm) return "-";
-  const mins = Math.floor(secondsPerKm / 60);
-  const secs = Math.round(secondsPerKm % 60);
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
-}
-
-function formatDuration(seconds: number | null): string {
-  if (!seconds) return "-";
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const secs = seconds % 60;
-  
-  if (hours > 0) {
-    return `${hours}:${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-  }
-  return `${minutes}:${secs.toString().padStart(2, "0")}`;
-}
 
 interface ActivityDetailPageProps {
   params: Promise<{ activityId: string }>;
@@ -87,7 +60,6 @@ export default async function ActivityDetailPage({ params }: ActivityDetailPageP
   const icon = activityTypeIcons[activity.activity_type] || "💪";
   const typeLabel = activityTypeLabels[activity.activity_type] || activity.activity_type;
   const startedAt = new Date(activity.started_at);
-  const distanceKm = activity.distance_meters ? Number(activity.distance_meters) / 1000 : 0;
 
   // Extract trackpoints for charts
   const gpxData = activity.gpx_data as { track?: Array<{
@@ -152,100 +124,17 @@ export default async function ActivityDetailPage({ params }: ActivityDetailPageP
       </div>
 
       {/* Main Stats Grid */}
-      <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-2">
-        {/* Distance */}
-        <div className="bg-card rounded-lg border px-3 py-2">
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <MapPin className="h-3 w-3" />
-            Afstand
-          </div>
-          <p className="text-lg font-semibold leading-tight">{distanceKm.toFixed(2)} <span className="text-xs font-normal text-muted-foreground">km</span></p>
-        </div>
-
-        {/* Duration */}
-        <div className="bg-card rounded-lg border px-3 py-2">
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <Clock className="h-3 w-3" />
-            Tijd
-          </div>
-          <p className="text-lg font-semibold leading-tight">{formatDuration(activity.duration_seconds)}</p>
-        </div>
-
-        {/* Pace */}
-        <div className="bg-card rounded-lg border px-3 py-2">
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <Timer className="h-3 w-3" />
-            Gem. tempo
-          </div>
-          <p className="text-lg font-semibold leading-tight">{formatPace(activity.avg_pace_sec_per_km)} <span className="text-xs font-normal text-muted-foreground">/km</span></p>
-        </div>
-
-        {/* Heart Rate */}
-        {activity.avg_heart_rate && (
-          <div className="bg-card rounded-lg border px-3 py-2">
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Heart className="h-3 w-3 text-red-500" />
-              Gem. hartslag
-            </div>
-            <p className="text-lg font-semibold leading-tight">{activity.avg_heart_rate} <span className="text-xs font-normal text-muted-foreground">bpm</span></p>
-          </div>
-        )}
-
-        {/* Max Heart Rate */}
-        {activity.max_heart_rate && (
-          <div className="bg-card rounded-lg border px-3 py-2">
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Heart className="h-3 w-3 text-red-600" />
-              Max hartslag
-            </div>
-            <p className="text-lg font-semibold leading-tight">{activity.max_heart_rate} <span className="text-xs font-normal text-muted-foreground">bpm</span></p>
-          </div>
-        )}
-
-        {/* Elevation */}
-        {activity.elevation_gain_meters && (
-          <div className="bg-card rounded-lg border px-3 py-2">
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Mountain className="h-3 w-3" />
-              Hoogteverschil
-            </div>
-            <p className="text-lg font-semibold leading-tight">{Math.round(Number(activity.elevation_gain_meters))} <span className="text-xs font-normal text-muted-foreground">m</span></p>
-          </div>
-        )}
-
-        {/* Cadence */}
-        {activity.avg_cadence && (
-          <div className="bg-card rounded-lg border px-3 py-2">
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Footprints className="h-3 w-3" />
-              Gem. cadans
-            </div>
-            <p className="text-lg font-semibold leading-tight">{activity.avg_cadence} <span className="text-xs font-normal text-muted-foreground">spm</span></p>
-          </div>
-        )}
-
-        {/* Calories */}
-        {activity.calories && (
-          <div className="bg-card rounded-lg border px-3 py-2">
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Flame className="h-3 w-3 text-orange-500" />
-              Calorieën
-            </div>
-            <p className="text-lg font-semibold leading-tight">{activity.calories} <span className="text-xs font-normal text-muted-foreground">kcal</span></p>
-          </div>
-        )}
-
-        {/* Best Pace */}
-        {activity.best_pace_sec_per_km && (
-          <div className="bg-card rounded-lg border px-3 py-2">
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <TrendingUp className="h-3 w-3 text-green-500" />
-              Beste tempo
-            </div>
-            <p className="text-lg font-semibold leading-tight">{formatPace(activity.best_pace_sec_per_km)} <span className="text-xs font-normal text-muted-foreground">/km</span></p>
-          </div>
-        )}
-      </div>
+      <ActivityStats
+        distanceMeters={activity.distance_meters ? Number(activity.distance_meters) : null}
+        durationSeconds={activity.duration_seconds}
+        avgPaceSecPerKm={activity.avg_pace_sec_per_km}
+        bestPaceSecPerKm={activity.best_pace_sec_per_km}
+        avgHeartRate={activity.avg_heart_rate}
+        maxHeartRate={activity.max_heart_rate}
+        elevationGainMeters={activity.elevation_gain_meters ? Number(activity.elevation_gain_meters) : null}
+        avgCadence={activity.avg_cadence}
+        calories={activity.calories}
+      />
 
       {/* Route Map & Charts with synchronized hover */}
       {trackpoints.length > 0 && (

@@ -1,17 +1,18 @@
 "use client"
 
 import { useTranslations } from "next-intl"
-import { Bell, Search } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Search } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Input } from "@/components/ui/input"
+import { NotificationsDropdown } from "@/components/notifications"
 
 interface SiteHeaderProps {
   userName?: string
+  locale?: string
 }
 
-export function SiteHeader({ userName = "" }: SiteHeaderProps) {
+export function SiteHeader({ userName = "", locale = "nl" }: SiteHeaderProps) {
   const t = useTranslations()
 
   return (
@@ -37,13 +38,7 @@ export function SiteHeader({ userName = "" }: SiteHeaderProps) {
           </div>
           
           {/* Notifications */}
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="h-4 w-4" />
-            <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
-              2
-            </span>
-            <span className="sr-only">{t("common.notifications")}</span>
-          </Button>
+          <NotificationsDropdown locale={locale} />
         </div>
       </div>
     </header>

@@ -6,6 +6,7 @@ import { Clock, MapPin, Heart, ChevronRight, Check, Download } from "lucide-reac
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 import type { Workout } from "@/types/database";
 
 interface WorkoutCardProps {
@@ -42,6 +43,7 @@ const workoutTypeIcons: Record<string, string> = {
 export function WorkoutCard({ workout, showDate = false }: WorkoutCardProps) {
   const t = useTranslations("workouts.types");
   const tStatus = useTranslations("workouts.status");
+  const { formatDistance, formatPace: formatPaceUnit } = useDistanceUnit();
   
   const colors = workoutTypeColors[workout.workout_type] || workoutTypeColors.easy_run;
   const icon = workoutTypeIcons[workout.workout_type] || "🏃";
@@ -49,9 +51,9 @@ export function WorkoutCard({ workout, showDate = false }: WorkoutCardProps) {
 
   const formatPace = (pace: number | null): string => {
     if (!pace) return "";
-    const mins = Math.floor(pace);
-    const secs = Math.round((pace - mins) * 60);
-    return `${mins}:${secs.toString().padStart(2, "0")} /km`;
+    // Convert pace from min/km decimal to seconds per km for the formatPaceUnit function
+    const paceSecPerKm = pace * 60;
+    return formatPaceUnit(paceSecPerKm);
   };
 
   return (
@@ -99,7 +101,7 @@ export function WorkoutCard({ workout, showDate = false }: WorkoutCardProps) {
             {workout.target_distance_km && (
               <div className="flex items-center gap-1.5">
                 <MapPin className="h-4 w-4" />
-                <span>{Number(workout.target_distance_km).toFixed(1)} km</span>
+                <span>{formatDistance(Number(workout.target_distance_km))}</span>
               </div>
             )}
             {workout.target_heart_rate_zone && (

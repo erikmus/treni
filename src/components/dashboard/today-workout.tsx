@@ -19,6 +19,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { useDistanceUnit } from "@/hooks/use-distance-unit"
 import type { Workout } from "@/types/database"
 
 interface TodayWorkoutProps {
@@ -42,6 +43,7 @@ const workoutTypeColors: Record<string, string> = {
 export function TodayWorkout({ workout, hasPlan }: TodayWorkoutProps) {
   const t = useTranslations("workouts.types")
   const tDashboard = useTranslations("dashboard")
+  const { formatDistance } = useDistanceUnit()
 
   if (!hasPlan) {
     return (
@@ -136,7 +138,7 @@ export function TodayWorkout({ workout, hasPlan }: TodayWorkoutProps) {
             {workout.target_distance_km && (
               <div className="flex items-center gap-1.5">
                 <MapPin className="h-4 w-4" />
-                <span>{Number(workout.target_distance_km).toFixed(1)} km</span>
+                <span>{formatDistance(Number(workout.target_distance_km))}</span>
               </div>
             )}
           </div>
