@@ -148,7 +148,7 @@ export default async function PlanDetailPage({ params }: PlanDetailPageProps) {
           </div>
           <p className="text-lg font-semibold">{totalDistanceKm.toFixed(0)} km</p>
           <p className="text-xs text-muted-foreground">
-            {t("detail.weeksSchedule", { weeks: plan.weeks_duration })}
+            {t("detail.weeksSchedule", { weeks: plan.weeks_duration ?? 0 })}
           </p>
         </div>
       </div>
