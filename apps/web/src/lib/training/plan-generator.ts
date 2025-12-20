@@ -477,20 +477,19 @@ function generateWeekWorkouts(
 ): GeneratedWorkout[] {
   const workouts: GeneratedWorkout[] = [];
 
-  // Sort preferred days
+  // Sort preferred days by day of week (monday first, etc.)
   const sortedDays = [...input.preferredDays].sort(
     (a, b) => DAY_NAME_TO_NUMBER[a] - DAY_NAME_TO_NUMBER[b]
   );
 
-  // Determine long run day
+  // Determine long run day (user preference or last day of the week)
   const longRunDay = input.longRunDay || sortedDays[sortedDays.length - 1];
-  const otherDays = sortedDays.filter((d) => d !== longRunDay);
+  
+  // Track which days are already used
+  const usedDays = new Set<string>();
 
   // Calculate workout distribution based on week type and phase
   const distribution = getWorkoutDistribution(weekType, phase?.name, input.daysPerWeek);
-
-  // Assign days to workout types
-  let dayIndex = 0;
 
   // Long run (always on designated day)
   if (distribution.longRun > 0) {
@@ -498,11 +497,15 @@ function generateWeekWorkouts(
     workouts.push(
       createLongRunWorkout(week, longRunDay, longRunVolume, paceZones, input, startDate, weekType)
     );
+    usedDays.add(longRunDay);
   }
 
-  // Speed work (intervals or tempo)
-  const speedDay = otherDays[dayIndex % otherDays.length];
-  if (distribution.speedWork > 0 && speedDay) {
+  // Get available days for other workouts (excluding long run day)
+  const availableDays = sortedDays.filter((d) => !usedDays.has(d));
+
+  // Speed work (intervals or tempo) - on first available day
+  if (distribution.speedWork > 0 && availableDays.length > 0) {
+    const speedDay = availableDays[0];
     const speedVolume = weekVolume * distribution.speedWork;
     const useInterval = week % 2 === 1; // Alternate between intervals and tempo
     workouts.push(
@@ -517,18 +520,16 @@ function generateWeekWorkouts(
         useInterval
       )
     );
-    dayIndex++;
+    usedDays.add(speedDay);
   }
 
-  // Easy runs (fill remaining days)
-  const remainingVolume = weekVolume - workouts.reduce((sum, w) => sum + w.target_distance_km, 0);
-  const easyDays = otherDays.filter(
-    (d) => !workouts.some((w) => DAY_NUMBER_TO_NAME[w.day_of_week].toLowerCase() === d)
-  );
+  // Easy runs (fill remaining available days)
+  const easyDays = sortedDays.filter((d) => !usedDays.has(d));
+  const remainingVolume = Math.max(0, weekVolume - workouts.reduce((sum, w) => sum + w.target_distance_km, 0));
   const easyRunCount = Math.min(easyDays.length, distribution.easyRuns);
-  const volumePerEasyRun = remainingVolume / Math.max(1, easyRunCount);
+  const volumePerEasyRun = easyRunCount > 0 ? remainingVolume / easyRunCount : 0;
 
-  for (let i = 0; i < easyRunCount && i < easyDays.length; i++) {
+  for (let i = 0; i < easyRunCount; i++) {
     workouts.push(
       createEasyRunWorkout(
         week,
@@ -540,9 +541,10 @@ function generateWeekWorkouts(
         weekType
       )
     );
+    usedDays.add(easyDays[i]);
   }
 
-  // Sort workouts by day
+  // Sort workouts by day of week
   workouts.sort((a, b) => {
     const dayA = (a.day_of_week + 7) % 7;
     const dayB = (b.day_of_week + 7) % 7;
@@ -916,16 +918,20 @@ function calculateScheduledDate(startDate: Date, weekNumber: number, dayName: st
   const currentDay = date.getDay();
   const targetDay = DAY_NAME_TO_NUMBER[dayName];
 
-  // Calculate days to add
-  let daysToAdd = (weekNumber - 1) * 7;
-  daysToAdd += (targetDay - currentDay + 7) % 7;
-
-  // If we're past the target day this week and it's week 1, move to next week
-  if (weekNumber === 1 && targetDay < currentDay) {
-    daysToAdd += 7;
+  // Calculate days from start date to the target day
+  // The modulo handles wrap-around (e.g., Saturday to Sunday is 1 day, not -6)
+  let daysToTargetDay = (targetDay - currentDay + 7) % 7;
+  
+  // If target day is same as current day and it's week 1, schedule for today
+  // Otherwise for week 1, schedule for the next occurrence of that day
+  if (daysToTargetDay === 0 && weekNumber > 1) {
+    daysToTargetDay = 7;
   }
 
-  date.setDate(date.getDate() + daysToAdd);
+  // Add weeks offset (week 1 = 0 extra weeks, week 2 = 1 extra week, etc.)
+  const totalDaysToAdd = daysToTargetDay + (weekNumber - 1) * 7;
+
+  date.setDate(date.getDate() + totalDaysToAdd);
 
   return date.toISOString().split("T")[0];
 }
