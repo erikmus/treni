@@ -391,7 +391,8 @@ export function stravaStreamsToGpxData(
   streams: Record<string, StravaActivityStream>,
   startTime: string
 ): object | null {
-  const latlng = streams.latlng?.data;
+  // latlng stream contains [lat, lon] pairs, not single numbers
+  const latlng = streams.latlng?.data as unknown as [number, number][] | undefined;
   const altitude = streams.altitude?.data;
   const time = streams.time?.data;
   const heartrate = streams.heartrate?.data;
