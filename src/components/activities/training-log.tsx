@@ -15,7 +15,6 @@ import {
 } from "date-fns";
 import { nl } from "date-fns/locale";
 import { cn } from "@/lib/utils";
-import { Triangle } from "lucide-react";
 
 interface Activity {
   id: string;
@@ -32,33 +31,22 @@ interface TrainingLogProps {
   weeksToShow?: number;
 }
 
-const dayNames = ["ma", "di", "wo", "do", "vrij", "za", "zo"];
-
-// Activity type to emoji mapping for the marker
-const activityEmoji: Record<string, string> = {
-  run: "🏃",
-  walk: "🚶",
-  cross_training: "💪",
-  cycling: "🚴",
-  swimming: "🏊",
-  other: "💪",
-};
-
-// Get color based on distance (green shades like Strava)
-function getDistanceColor(distanceKm: number): string {
-  if (distanceKm >= 15) return "bg-green-500";
-  if (distanceKm >= 10) return "bg-green-500";
-  if (distanceKm >= 5) return "bg-green-500";
-  return "bg-green-500";
-}
+const dayNamesShort = ["M", "D", "W", "D", "V", "Z", "Z"];
+const dayNamesFull = ["ma", "di", "wo", "do", "vr", "za", "zo"];
 
 // Get circle size based on distance
-function getCircleSize(distanceKm: number): string {
-  if (distanceKm >= 20) return "w-16 h-16 text-base";
-  if (distanceKm >= 15) return "w-14 h-14 text-base";
-  if (distanceKm >= 10) return "w-12 h-12 text-sm";
-  if (distanceKm >= 5) return "w-10 h-10 text-sm";
-  return "w-8 h-8 text-xs";
+function getCircleSize(distanceKm: number, isMobile: boolean): string {
+  if (isMobile) {
+    if (distanceKm >= 15) return "w-9 h-9 text-[10px]";
+    if (distanceKm >= 10) return "w-8 h-8 text-[10px]";
+    if (distanceKm >= 5) return "w-7 h-7 text-[10px]";
+    return "w-6 h-6 text-[9px]";
+  }
+  if (distanceKm >= 20) return "w-14 h-14 text-sm";
+  if (distanceKm >= 15) return "w-12 h-12 text-sm";
+  if (distanceKm >= 10) return "w-11 h-11 text-xs";
+  if (distanceKm >= 5) return "w-10 h-10 text-xs";
+  return "w-8 h-8 text-[10px]";
 }
 
 export function TrainingLog({ activities, weeksToShow = 52 }: TrainingLogProps) {
@@ -92,20 +80,26 @@ export function TrainingLog({ activities, weeksToShow = 52 }: TrainingLogProps) 
     return map;
   }, [activities]);
 
-  // Convert JS day (0=Sun) to our index (0=Mon)
-  function getDayIndex(date: Date): number {
-    const jsDay = getDay(date);
-    return jsDay === 0 ? 6 : jsDay - 1;
-  }
-
   return (
     <div className="w-full">
-      {/* Header row with year and day names */}
-      <div className="sticky top-0 bg-background z-10 border-b">
-        <div className="grid grid-cols-[180px_repeat(7,1fr)] gap-2 py-3 px-4">
+      {/* Header row - Desktop */}
+      <div className="sticky top-0 bg-background z-10 border-b hidden md:block">
+        <div className="grid grid-cols-[160px_repeat(7,1fr)] gap-1 py-3 px-4">
           <div className="text-lg font-bold">{format(new Date(), "yyyy")}</div>
-          {dayNames.map((day) => (
+          {dayNamesFull.map((day) => (
             <div key={day} className="text-center text-sm text-muted-foreground font-medium">
+              {day}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Header row - Mobile */}
+      <div className="sticky top-0 bg-background z-10 border-b md:hidden">
+        <div className="grid grid-cols-[90px_repeat(7,1fr)] gap-0.5 py-2 px-2">
+          <div className="text-base font-bold">{format(new Date(), "yyyy")}</div>
+          {dayNamesShort.map((day, i) => (
+            <div key={i} className="text-center text-xs text-muted-foreground font-medium">
               {day}
             </div>
           ))}
@@ -145,90 +139,146 @@ export function TrainingLog({ activities, weeksToShow = 52 }: TrainingLogProps) 
           );
 
           return (
-            <div
-              key={weekKey}
-              className={cn(
-                "grid grid-cols-[180px_repeat(7,1fr)] gap-2 py-4 px-4 items-center",
-                isCurrentWeek && "bg-muted/30"
-              )}
-            >
-              {/* Week info */}
-              <div className="space-y-1">
-                <div className="text-base font-semibold">
-                  {format(weekStart, "d", { locale: nl })}–{format(weekEnd, "d MMM", { locale: nl }).toLowerCase()}
+            <div key={weekKey}>
+              {/* Desktop Layout */}
+              <div
+                className={cn(
+                  "hidden md:grid grid-cols-[160px_repeat(7,1fr)] gap-1 py-3 px-4 items-center",
+                  isCurrentWeek && "bg-muted/30"
+                )}
+              >
+                {/* Week info */}
+                <div className="space-y-0.5">
+                  <div className="text-sm font-semibold">
+                    {format(weekStart, "d", { locale: nl })}–{format(weekEnd, "d MMM", { locale: nl }).toLowerCase()}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    {totalDistanceKm > 0 ? (
+                      <span className="font-semibold text-foreground">
+                        {totalDistanceKm.toLocaleString("nl-NL", {
+                          minimumFractionDigits: 1,
+                          maximumFractionDigits: 1,
+                        })} km
+                      </span>
+                    ) : (
+                      <span className="text-muted-foreground/60">—</span>
+                    )}
+                  </div>
                 </div>
-                <div className="text-xs text-muted-foreground">Totale afstand</div>
-                <div className="text-xl font-bold">
-                  {totalDistanceKm.toLocaleString("nl-NL", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}{" "}
-                  km
-                </div>
+
+                {/* Day cells - Desktop */}
+                {daysWithActivities.map(({ date, activities: dayActivities }, dayIndex) => {
+                  const isTodayDate = isToday(date);
+                  const hasActivities = dayActivities.length > 0;
+
+                  return (
+                    <div
+                      key={dayIndex}
+                      className={cn(
+                        "flex flex-col items-center justify-center min-h-[60px] relative rounded-lg",
+                        isTodayDate && "bg-primary/5 ring-1 ring-primary/20"
+                      )}
+                    >
+                      {hasActivities ? (
+                        <div className="flex flex-col items-center gap-0.5">
+                          {dayActivities.map((activity) => {
+                            const distanceKm = (Number(activity.distance_meters) || 0) / 1000;
+                            
+                            return (
+                              <Link
+                                key={activity.id}
+                                href={`/dashboard/activities/${activity.id}`}
+                                className={cn(
+                                  "rounded-full flex items-center justify-center font-bold text-white transition-transform hover:scale-110 bg-emerald-500",
+                                  getCircleSize(distanceKm, false)
+                                )}
+                                title={activity.title || undefined}
+                              >
+                                {distanceKm >= 1 ? `${Math.round(distanceKm)}` : distanceKm.toFixed(1)}
+                              </Link>
+                            );
+                          })}
+                          {dayActivities.length === 1 && dayActivities[0].title && (
+                            <span className="text-[10px] text-muted-foreground truncate max-w-[80px] text-center leading-tight">
+                              {dayActivities[0].title.split(" - ")[0]}
+                            </span>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="w-2 h-2 rounded-full bg-muted-foreground/20" />
+                      )}
+                    </div>
+                  );
+                })}
               </div>
 
-              {/* Day cells */}
-              {daysWithActivities.map(({ date, activities: dayActivities }, dayIndex) => {
-                const isTodayDate = isToday(date);
-                const hasActivities = dayActivities.length > 0;
-                const isPast = date < new Date() && !isTodayDate;
-                
-                // Calculate total distance for this day
-                const dayDistanceKm = dayActivities.reduce(
-                  (sum, a) => sum + (Number(a.distance_meters) || 0) / 1000,
-                  0
-                );
-
-                return (
-                  <div
-                    key={dayIndex}
-                    className="flex flex-col items-center justify-center min-h-[80px] relative"
-                  >
-                    {isTodayDate && (
-                      <div className="absolute -top-1 text-xs font-semibold text-primary">
-                        Vandaag
-                      </div>
-                    )}
-                    
-                    {hasActivities ? (
-                      <div className="flex flex-col items-center gap-1">
-                        {dayActivities.map((activity) => {
-                          const distanceKm = (Number(activity.distance_meters) || 0) / 1000;
-                          
-                          return (
-                            <Link
-                              key={activity.id}
-                              href={`/dashboard/activities/${activity.id}`}
-                              className={cn(
-                                "rounded-full flex items-center justify-center font-bold text-white transition-transform hover:scale-110",
-                                getDistanceColor(distanceKm),
-                                getCircleSize(distanceKm)
-                              )}
-                              title={activity.title || undefined}
-                            >
-                              {distanceKm >= 1 ? (
-                                `${Math.round(distanceKm)} km`
-                              ) : (
-                                distanceKm.toFixed(1)
-                              )}
-                            </Link>
-                          );
-                        })}
-                        {/* Activity title below */}
-                        {dayActivities.length === 1 && dayActivities[0].title && (
-                          <span className="text-xs text-muted-foreground truncate max-w-[100px] text-center">
-                            {dayActivities[0].title}
-                          </span>
-                        )}
-                      </div>
-                    ) : isPast ? (
-                      <span className="text-sm text-muted-foreground/50">Rust</span>
-                    ) : isTodayDate ? (
-                      <Triangle className="h-4 w-4 text-primary fill-primary" />
-                    ) : null}
+              {/* Mobile Layout */}
+              <div
+                className={cn(
+                  "md:hidden grid grid-cols-[90px_repeat(7,1fr)] gap-0.5 py-2 px-2 items-center",
+                  isCurrentWeek && "bg-muted/30"
+                )}
+              >
+                {/* Week info - Mobile */}
+                <div className="pr-1">
+                  <div className="text-xs font-semibold leading-tight">
+                    {format(weekStart, "d", { locale: nl })}–{format(weekEnd, "d", { locale: nl })}
                   </div>
-                );
-              })}
+                  <div className="text-[10px] text-muted-foreground">
+                    {format(weekEnd, "MMM", { locale: nl }).toLowerCase()}
+                  </div>
+                  {totalDistanceKm > 0 && (
+                    <div className="text-xs font-bold text-emerald-600 mt-0.5">
+                      {totalDistanceKm.toLocaleString("nl-NL", {
+                        minimumFractionDigits: 1,
+                        maximumFractionDigits: 1,
+                      })} km
+                    </div>
+                  )}
+                </div>
+
+                {/* Day cells - Mobile */}
+                {daysWithActivities.map(({ date, activities: dayActivities }, dayIndex) => {
+                  const isTodayDate = isToday(date);
+                  const hasActivities = dayActivities.length > 0;
+
+                  return (
+                    <div
+                      key={dayIndex}
+                      className={cn(
+                        "flex flex-col items-center justify-center min-h-[44px] relative rounded",
+                        isTodayDate && "bg-primary/10"
+                      )}
+                    >
+                      {hasActivities ? (
+                        <div className="flex flex-col items-center">
+                          {dayActivities.slice(0, 1).map((activity) => {
+                            const distanceKm = (Number(activity.distance_meters) || 0) / 1000;
+                            
+                            return (
+                              <Link
+                                key={activity.id}
+                                href={`/dashboard/activities/${activity.id}`}
+                                className={cn(
+                                  "rounded-full flex items-center justify-center font-bold text-white bg-emerald-500",
+                                  getCircleSize(distanceKm, true)
+                                )}
+                              >
+                                {distanceKm >= 1 ? Math.round(distanceKm) : "·"}
+                              </Link>
+                            );
+                          })}
+                          {dayActivities.length > 1 && (
+                            <span className="text-[8px] text-muted-foreground">+{dayActivities.length - 1}</span>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/15" />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           );
         })}
@@ -236,4 +286,3 @@ export function TrainingLog({ activities, weeksToShow = 52 }: TrainingLogProps) 
     </div>
   );
 }
-
