@@ -1,36 +1,167 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Treni - Hardloop Training App
 
-## Getting Started
+Een persoonlijke hardloop coach applicatie met web en mobiele apps.
 
-First, run the development server:
+## 📁 Project Structuur
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+treni/
+├── apps/
+│   ├── web/          # Next.js web applicatie
+│   └── mobile/       # Expo React Native app
+├── packages/
+│   └── shared/       # Gedeelde code (types, utils, i18n)
+├── turbo.json        # Turborepo configuratie
+└── pnpm-workspace.yaml
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Aan de slag
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Vereisten
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Node.js 18+
+- pnpm 9+
+- Expo CLI (voor mobile development)
+- Xcode (voor iOS development)
+- Android Studio (voor Android development)
 
-## Learn More
+### Installatie
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Installeer dependencies
+pnpm install
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Build shared packages
+pnpm build --filter=@treni/shared
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Development
 
-## Deploy on Vercel
+```bash
+# Start alle apps
+pnpm dev
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Start alleen de web app
+pnpm dev:web
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Start alleen de mobile app
+pnpm dev:mobile
+```
+
+### Web App (Next.js)
+
+```bash
+cd apps/web
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in je browser.
+
+### Mobile App (Expo)
+
+```bash
+cd apps/mobile
+pnpm dev
+```
+
+Scan de QR code met de Expo Go app op je telefoon.
+
+#### iOS Simulator
+
+```bash
+cd apps/mobile
+pnpm ios
+```
+
+#### Android Emulator
+
+```bash
+cd apps/mobile
+pnpm android
+```
+
+## 📦 Packages
+
+### @treni/shared
+
+Gedeelde code tussen web en mobile:
+
+- **types/** - Database types (Supabase generated)
+- **utils/** - Utility functies (distance conversie, formatting)
+- **i18n/** - Internationalisatie configuratie
+
+```typescript
+// Gebruik in web of mobile
+import { Profile, Activity } from '@treni/shared/types'
+import { formatDistance, formatPace } from '@treni/shared/utils'
+import { locales, defaultLocale } from '@treni/shared/i18n'
+```
+
+## 🔧 Environment Variables
+
+### Web App (`apps/web/.env.local`)
+
+```
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+STRAVA_CLIENT_ID=your_strava_client_id
+STRAVA_CLIENT_SECRET=your_strava_client_secret
+```
+
+### Mobile App (`apps/mobile/.env`)
+
+```
+EXPO_PUBLIC_SUPABASE_URL=your_supabase_url
+EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+## 🏗️ Build
+
+```bash
+# Build alle packages
+pnpm build
+
+# Build alleen web
+pnpm build:web
+
+# Build mobile (via EAS)
+cd apps/mobile
+eas build --platform ios
+eas build --platform android
+```
+
+## 📱 Mobile App Features
+
+- ✅ Authenticatie (login/signup)
+- ✅ Home dashboard met workout van vandaag
+- ✅ Workouts overzicht
+- ✅ Activiteiten lijst
+- ✅ Profiel met instellingen
+- 🔲 Strava OAuth integratie
+- 🔲 Push notifications
+- 🔲 Offline support
+
+## 🔗 Technologie Stack
+
+### Web
+- Next.js 16
+- React 19
+- Tailwind CSS 4
+- Supabase (auth, database)
+- next-intl (i18n)
+
+### Mobile
+- Expo 52
+- React Native 0.76
+- Expo Router
+- Supabase (auth, database)
+
+### Shared
+- TypeScript
+- date-fns
+- Zod
+
+## 📄 License
+
+MIT
