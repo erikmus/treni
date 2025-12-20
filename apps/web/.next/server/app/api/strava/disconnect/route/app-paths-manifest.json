@@ -1,0 +1,3 @@
+{
+  "/api/strava/disconnect/route": "app/api/strava/disconnect/route.js"
+}

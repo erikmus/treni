@@ -1,0 +1,3 @@
+{
+  "/api/auth/strava/route": "app/api/auth/strava/route.js"
+}

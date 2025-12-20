@@ -9,6 +9,7 @@ interface AvailabilityFormProps {
   daysPerWeek: number;
   hoursPerWeek: number;
   preferredDays: string[];
+  longRunDay?: string;
   onChange: (updates: Partial<PlanWizardData>) => void;
 }
 
@@ -26,13 +27,24 @@ export function AvailabilityForm({
   daysPerWeek,
   hoursPerWeek,
   preferredDays,
+  longRunDay,
   onChange,
 }: AvailabilityFormProps) {
   const toggleDay = (day: string) => {
     const newDays = preferredDays.includes(day)
       ? preferredDays.filter((d) => d !== day)
       : [...preferredDays, day];
-    onChange({ preferredDays: newDays });
+    
+    // If long run day is removed, clear it
+    if (longRunDay && !newDays.includes(longRunDay)) {
+      onChange({ preferredDays: newDays, longRunDay: undefined });
+    } else {
+      onChange({ preferredDays: newDays });
+    }
+  };
+
+  const selectLongRunDay = (day: string) => {
+    onChange({ longRunDay: day });
   };
 
   const selectedCount = preferredDays.length;
@@ -140,6 +152,60 @@ export function AvailabilityForm({
             </p>
           )}
         </div>
+
+        {/* Long Run Day Selection */}
+        {preferredDays.length >= 2 && (
+          <div className="space-y-4">
+            <div>
+              <Label>Op welke dag plan je het liefst je lange duurloop?</Label>
+              <p className="text-xs text-muted-foreground mt-1">
+                De lange duurloop is de belangrijkste training van de week
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-7 gap-2">
+              {weekDays.map((day) => {
+                const isAvailable = preferredDays.includes(day.key);
+                const isSelected = longRunDay === day.key;
+                
+                if (!isAvailable) return (
+                  <div
+                    key={day.key}
+                    className="flex flex-col items-center justify-center p-3 rounded-lg border-2 border-border/30 opacity-30"
+                  >
+                    <span className="text-xs text-muted-foreground">{day.label}</span>
+                    <span className="text-lg mt-1">-</span>
+                  </div>
+                );
+                
+                return (
+                  <button
+                    key={day.key}
+                    onClick={() => selectLongRunDay(day.key)}
+                    className={cn(
+                      "flex flex-col items-center justify-center p-3 rounded-lg border-2 transition-all",
+                      isSelected
+                        ? "border-amber-500 bg-amber-500/10 text-amber-600"
+                        : "border-border hover:border-amber-500/50"
+                    )}
+                  >
+                    <span className="text-xs text-muted-foreground">{day.label}</span>
+                    <span className="text-lg mt-1">
+                      {isSelected ? "🏃" : "○"}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+            
+            {longRunDay && (
+              <p className="text-sm text-muted-foreground">
+                🏃 Lange duurloop:{" "}
+                <strong>{weekDays.find((d) => d.key === longRunDay)?.fullLabel}</strong>
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Tips based on selection */}
         <div className="rounded-lg bg-muted/50 p-4">

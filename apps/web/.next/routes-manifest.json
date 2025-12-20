@@ -1,0 +1,285 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/api/activities/[activityId]",
+      "regex": "^/api/activities/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPactivityId": "nxtPactivityId"
+      },
+      "namedRegex": "^/api/activities/(?<nxtPactivityId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/plans/[planId]",
+      "regex": "^/api/plans/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPplanId": "nxtPplanId"
+      },
+      "namedRegex": "^/api/plans/(?<nxtPplanId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/workouts/[workoutId]/fit",
+      "regex": "^/api/workouts/([^/]+?)/fit(?:/)?$",
+      "routeKeys": {
+        "nxtPworkoutId": "nxtPworkoutId"
+      },
+      "namedRegex": "^/api/workouts/(?<nxtPworkoutId>[^/]+?)/fit(?:/)?$"
+    },
+    {
+      "page": "/dashboard/activities/[activityId]",
+      "regex": "^/dashboard/activities/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPactivityId": "nxtPactivityId"
+      },
+      "namedRegex": "^/dashboard/activities/(?<nxtPactivityId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/dashboard/plan/[planId]",
+      "regex": "^/dashboard/plan/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPplanId": "nxtPplanId"
+      },
+      "namedRegex": "^/dashboard/plan/(?<nxtPplanId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/dashboard/workouts/[workoutId]",
+      "regex": "^/dashboard/workouts/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPworkoutId": "nxtPworkoutId"
+      },
+      "namedRegex": "^/dashboard/workouts/(?<nxtPworkoutId>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/about",
+      "regex": "^/about(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/about(?:/)?$"
+    },
+    {
+      "page": "/api/activities/upload",
+      "regex": "^/api/activities/upload(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/activities/upload(?:/)?$"
+    },
+    {
+      "page": "/api/auth/strava",
+      "regex": "^/api/auth/strava(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/auth/strava(?:/)?$"
+    },
+    {
+      "page": "/api/notifications",
+      "regex": "^/api/notifications(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/notifications(?:/)?$"
+    },
+    {
+      "page": "/api/notifications/read",
+      "regex": "^/api/notifications/read(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/notifications/read(?:/)?$"
+    },
+    {
+      "page": "/api/oauth/decision",
+      "regex": "^/api/oauth/decision(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/oauth/decision(?:/)?$"
+    },
+    {
+      "page": "/api/search",
+      "regex": "^/api/search(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/search(?:/)?$"
+    },
+    {
+      "page": "/api/set-locale",
+      "regex": "^/api/set\\-locale(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/set\\-locale(?:/)?$"
+    },
+    {
+      "page": "/api/strava/disconnect",
+      "regex": "^/api/strava/disconnect(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/strava/disconnect(?:/)?$"
+    },
+    {
+      "page": "/api/strava/sync",
+      "regex": "^/api/strava/sync(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/strava/sync(?:/)?$"
+    },
+    {
+      "page": "/auth/callback",
+      "regex": "^/auth/callback(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/auth/callback(?:/)?$"
+    },
+    {
+      "page": "/auth/strava/callback",
+      "regex": "^/auth/strava/callback(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/auth/strava/callback(?:/)?$"
+    },
+    {
+      "page": "/dashboard",
+      "regex": "^/dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard(?:/)?$"
+    },
+    {
+      "page": "/dashboard/activities",
+      "regex": "^/dashboard/activities(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/activities(?:/)?$"
+    },
+    {
+      "page": "/dashboard/activities/new",
+      "regex": "^/dashboard/activities/new(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/activities/new(?:/)?$"
+    },
+    {
+      "page": "/dashboard/plan",
+      "regex": "^/dashboard/plan(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/plan(?:/)?$"
+    },
+    {
+      "page": "/dashboard/plan/new",
+      "regex": "^/dashboard/plan/new(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/plan/new(?:/)?$"
+    },
+    {
+      "page": "/dashboard/settings",
+      "regex": "^/dashboard/settings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/settings(?:/)?$"
+    },
+    {
+      "page": "/dashboard/settings/billing",
+      "regex": "^/dashboard/settings/billing(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/settings/billing(?:/)?$"
+    },
+    {
+      "page": "/dashboard/settings/integrations",
+      "regex": "^/dashboard/settings/integrations(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/settings/integrations(?:/)?$"
+    },
+    {
+      "page": "/dashboard/settings/notifications",
+      "regex": "^/dashboard/settings/notifications(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/settings/notifications(?:/)?$"
+    },
+    {
+      "page": "/dashboard/settings/profile",
+      "regex": "^/dashboard/settings/profile(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/settings/profile(?:/)?$"
+    },
+    {
+      "page": "/dashboard/stats",
+      "regex": "^/dashboard/stats(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/stats(?:/)?$"
+    },
+    {
+      "page": "/dashboard/workouts",
+      "regex": "^/dashboard/workouts(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/workouts(?:/)?$"
+    },
+    {
+      "page": "/favicon.ico",
+      "regex": "^/favicon\\.ico(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
+    },
+    {
+      "page": "/oauth/consent",
+      "regex": "^/oauth/consent(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/oauth/consent(?:/)?$"
+    },
+    {
+      "page": "/privacy",
+      "regex": "^/privacy(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/privacy(?:/)?$"
+    },
+    {
+      "page": "/signup",
+      "regex": "^/signup(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/signup(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

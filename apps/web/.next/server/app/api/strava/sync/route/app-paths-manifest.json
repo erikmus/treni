@@ -1,0 +1,3 @@
+{
+  "/api/strava/sync/route": "app/api/strava/sync/route.js"
+}

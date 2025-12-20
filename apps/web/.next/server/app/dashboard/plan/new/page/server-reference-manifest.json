@@ -1,0 +1,20 @@
+{
+  "node": {
+    "408bfdbf9f6d976cfa20bd5c40b33f0b1d6ce52113": {
+      "workers": {
+        "app/dashboard/plan/new/page": {
+          "moduleId": 5419,
+          "async": false,
+          "exportedName": "generateTrainingPlan",
+          "filename": "apps/web/src/lib/training/plan-generator.ts"
+        }
+      },
+      "layer": {
+        "app/dashboard/plan/new/page": "action-browser"
+      },
+      "exportedName": "generateTrainingPlan",
+      "filename": "apps/web/src/lib/training/plan-generator.ts"
+    }
+  },
+  "edge": {}
+}

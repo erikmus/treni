@@ -149,6 +149,12 @@ export function PlanReview({ data }: PlanReviewProps) {
                 {data.preferredDays.map((d) => weekDays[d]).join(", ")}
               </span>
             </div>
+            {data.longRunDay && (
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Lange duurloop</span>
+                <span className="font-medium">{weekDays[data.longRunDay]} 🏃</span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -178,11 +184,11 @@ export function PlanReview({ data }: PlanReviewProps) {
           </div>
         </div>
 
-        {/* AI Notice */}
+        {/* Training Principles Notice */}
         <div className="rounded-lg bg-muted/50 p-4 text-center">
           <p className="text-sm text-muted-foreground">
-            🤖 Je schema wordt gegenereerd door AI op basis van bewezen trainingsprincipes.
-            Het is volledig gepersonaliseerd voor jouw niveau en doelen.
+            📊 Je schema wordt gegenereerd op basis van bewezen trainingsprincipes:
+            progressieve opbouw, herstelweken elke 4 weken, en een taper naar je wedstrijd.
           </p>
         </div>
       </div>

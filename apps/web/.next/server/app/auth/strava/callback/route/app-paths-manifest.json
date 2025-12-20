@@ -1,0 +1,3 @@
+{
+  "/auth/strava/callback/route": "app/auth/strava/callback/route.js"
+}

@@ -10,7 +10,7 @@ import { EventDetails } from "./event-details";
 import { ExperienceForm } from "./experience-form";
 import { AvailabilityForm } from "./availability-form";
 import { PlanReview } from "./plan-review";
-import { generatePlanFromTemplates } from "@/lib/training/generate-plan-from-templates";
+import { generateTrainingPlan } from "@/lib/training/plan-generator";
 import { createClient } from "@/lib/supabase/client";
 import type { GoalType, ExperienceLevel, TablesInsert, Json } from "@/types/database";
 
@@ -33,6 +33,8 @@ export interface PlanWizardData {
   daysPerWeek: number;
   hoursPerWeek: number;
   preferredDays: string[];
+  longRunDay?: string;
+  startingWeeklyKm?: number;
 }
 
 const initialData: PlanWizardData = {
@@ -47,6 +49,7 @@ const initialData: PlanWizardData = {
   daysPerWeek: 4,
   hoursPerWeek: 5,
   preferredDays: ["tuesday", "thursday", "saturday", "sunday"],
+  longRunDay: "sunday",
 };
 
 const STEPS = [
@@ -117,8 +120,8 @@ export function PlanWizard() {
         weeksDuration = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 7));
       }
 
-      // Generate plan from templates (no AI needed)
-      const planResult = await generatePlanFromTemplates({
+      // Generate plan using the new smart generator
+      const planResult = await generateTrainingPlan({
         goalType: data.goalType!,
         eventDate: data.eventDate,
         targetTimeMinutes: data.targetTimeMinutes,
@@ -130,6 +133,8 @@ export function PlanWizard() {
         hoursPerWeek: data.hoursPerWeek,
         preferredDays: data.preferredDays,
         weeksDuration,
+        longRunDay: data.longRunDay,
+        startingWeeklyKm: data.startingWeeklyKm || data.recentWeeklyKm,
       });
 
       if (!planResult.success || !planResult.workouts) {
@@ -156,7 +161,7 @@ export function PlanWizard() {
           start_date: startDate.toISOString().split("T")[0],
           end_date: endDate.toISOString().split("T")[0],
           weeks_duration: weeksDuration,
-          plan_data: planResult.plan,
+          plan_data: planResult.plan ? JSON.parse(JSON.stringify(planResult.plan)) as Json : null,
         })
         .select()
         .single();
@@ -181,7 +186,7 @@ export function PlanWizard() {
         target_distance_km: workout.target_distance_km,
         target_pace_min_per_km: workout.target_pace_min_per_km,
         target_heart_rate_zone: workout.target_heart_rate_zone,
-        workout_structure: workout.workout_structure as Json,
+        workout_structure: JSON.parse(JSON.stringify(workout.workout_structure)) as Json,
         coach_notes: workout.coach_notes,
         status: "scheduled",
       }));
@@ -278,6 +283,7 @@ export function PlanWizard() {
             daysPerWeek={data.daysPerWeek}
             hoursPerWeek={data.hoursPerWeek}
             preferredDays={data.preferredDays}
+            longRunDay={data.longRunDay}
             onChange={updateData}
           />
         )}
