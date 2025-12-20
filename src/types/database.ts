@@ -123,6 +123,47 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          id: string
+          user_id: string
+          type: string
+          title: string
+          message: string | null
+          data: Json
+          read_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          type: string
+          title: string
+          message?: string | null
+          data?: Json
+          read_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          type?: string
+          title?: string
+          message?: string | null
+          data?: Json
+          read_at?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       plan_template_workouts: {
         Row: {
           day_name: string | null
@@ -640,18 +681,7 @@ export type UserStats = Tables<'user_stats'>
 export type WorkoutTemplate = Tables<'workout_templates'>
 export type PlanTemplate = Tables<'plan_templates'>
 export type PlanTemplateWorkout = Tables<'plan_template_workouts'>
-
-// Notification type (manual definition since we just created the table)
-export type Notification = {
-  id: string
-  user_id: string
-  type: NotificationType
-  title: string
-  message: string | null
-  data: Json
-  read_at: string | null
-  created_at: string
-}
+export type Notification = Tables<'notifications'>
 
 // Enums
 export type DistanceUnit = 'km' | 'mi'
