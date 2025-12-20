@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation"
+import { Suspense } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import {
@@ -6,6 +7,7 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import { SearchProvider } from "@/components/search/search-provider"
+import { StravaWelcome } from "@/components/dashboard/strava-welcome"
 import { createClient } from "@/lib/supabase/server"
 
 export default async function DashboardLayout({
@@ -49,6 +51,9 @@ export default async function DashboardLayout({
         <SidebarInset>
           <SiteHeader userName={profile?.full_name || "daar"} />
           <div className="flex flex-1 flex-col">
+            <Suspense fallback={null}>
+              <StravaWelcome />
+            </Suspense>
             <div className="@container/main flex flex-1 flex-col gap-2">
               {children}
             </div>

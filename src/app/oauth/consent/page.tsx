@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
 import { Shield, ExternalLink, Check, X } from 'lucide-react'
 
 interface ConsentPageProps {
@@ -9,6 +10,7 @@ interface ConsentPageProps {
 export default async function ConsentPage({ searchParams }: ConsentPageProps) {
   const params = await searchParams
   const authorizationId = params.authorization_id
+  const t = await getTranslations('oauth')
 
   if (!authorizationId) {
     return (
@@ -17,8 +19,8 @@ export default async function ConsentPage({ searchParams }: ConsentPageProps) {
           <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
             <X className="h-8 w-8 text-destructive" />
           </div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">Fout</h1>
-          <p className="text-muted-foreground">Ontbrekende authorization_id parameter</p>
+          <h1 className="text-2xl font-bold text-foreground mb-2">{t('error')}</h1>
+          <p className="text-muted-foreground">{t('missingAuthId')}</p>
         </div>
       </div>
     )
@@ -47,19 +49,11 @@ export default async function ConsentPage({ searchParams }: ConsentPageProps) {
           <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
             <X className="h-8 w-8 text-destructive" />
           </div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">Ongeldige aanvraag</h1>
-          <p className="text-muted-foreground">{error?.message || 'Ongeldig autorisatieverzoek'}</p>
+          <h1 className="text-2xl font-bold text-foreground mb-2">{t('invalidRequest')}</h1>
+          <p className="text-muted-foreground">{error?.message || t('invalidAuthRequest')}</p>
         </div>
       </div>
     )
-  }
-
-  // Map common scope names to Dutch descriptions
-  const scopeDescriptions: Record<string, string> = {
-    openid: 'Je identiteit verifiëren',
-    email: 'Je e-mailadres bekijken',
-    profile: 'Je profielinformatie bekijken',
-    phone: 'Je telefoonnummer bekijken',
   }
 
   // Convert scope string to array (scopes are space-separated in OAuth)
@@ -74,10 +68,10 @@ export default async function ConsentPage({ searchParams }: ConsentPageProps) {
             <Shield className="h-8 w-8 text-primary" />
           </div>
           <h1 className="text-2xl font-bold text-foreground mb-2">
-            Autoriseer {authDetails.client.name}
+            {t('authorize', { app: authDetails.client.name })}
           </h1>
           <p className="text-muted-foreground">
-            Deze applicatie wil toegang tot je Treni account
+            {t('wantsAccess')}
           </p>
         </div>
 
@@ -107,7 +101,7 @@ export default async function ConsentPage({ searchParams }: ConsentPageProps) {
           {scopes.length > 0 && (
             <div className="mb-6">
               <h3 className="text-sm font-medium text-foreground mb-3">
-                Deze app vraagt toestemming om:
+                {t('requestsPermission')}
               </h3>
               <ul className="space-y-2">
                 {scopes.map((scope) => (
@@ -116,7 +110,7 @@ export default async function ConsentPage({ searchParams }: ConsentPageProps) {
                       <Check className="h-3.5 w-3.5 text-primary" />
                     </div>
                     <span className="text-muted-foreground">
-                      {scopeDescriptions[scope] || scope}
+                      {t.has(`scopes.${scope}` as const) ? t(`scopes.${scope}` as `scopes.${string}`) : scope}
                     </span>
                   </li>
                 ))}
@@ -126,7 +120,7 @@ export default async function ConsentPage({ searchParams }: ConsentPageProps) {
 
           {/* User Info */}
           <div className="mb-6 p-3 bg-muted/50 rounded-lg">
-            <p className="text-xs text-muted-foreground mb-1">Je bent ingelogd als</p>
+            <p className="text-xs text-muted-foreground mb-1">{t('loggedInAs')}</p>
             <p className="text-sm font-medium text-foreground">{user.email}</p>
           </div>
 
@@ -140,7 +134,7 @@ export default async function ConsentPage({ searchParams }: ConsentPageProps) {
               value="approve"
               className="w-full py-3 px-4 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
-              Toestaan
+              {t('allow')}
             </button>
             
             <button
@@ -149,18 +143,17 @@ export default async function ConsentPage({ searchParams }: ConsentPageProps) {
               value="deny"
               className="w-full py-3 px-4 bg-secondary text-secondary-foreground font-medium rounded-lg hover:bg-secondary/80 transition-colors focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2"
             >
-              Weigeren
+              {t('deny')}
             </button>
           </form>
         </div>
 
         {/* Footer */}
         <p className="text-center text-xs text-muted-foreground mt-6">
-          Door toestemming te geven, sta je deze app toe om de bovenstaande informatie te gebruiken volgens hun{' '}
-          <span className="underline">privacybeleid</span>.
+          {t('consentFooter')}{' '}
+          <span className="underline">{t('privacyPolicy')}</span>.
         </p>
       </div>
     </div>
   )
 }
-

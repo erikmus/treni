@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { TrendingUp, TrendingDown, Flame, Timer, MapPin, Calendar, Plus } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
@@ -30,6 +31,9 @@ interface SectionCardsProps {
 }
 
 export function SectionCards({ stats, hasPlan = true }: SectionCardsProps) {
+  const t = useTranslations("sectionCards")
+  const tCommon = useTranslations("common")
+  
   // Default to zeros if no stats provided
   const data = stats || {
     weeklyDistance: 0,
@@ -45,7 +49,7 @@ export function SectionCards({ stats, hasPlan = true }: SectionCardsProps) {
     if (minutes === 0) return "0m"
     const hours = Math.floor(minutes / 60)
     const mins = minutes % 60
-    return hours > 0 ? `${hours}u ${mins}m` : `${mins}m`
+    return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`
   }
 
   // Show simplified cards when no plan exists
@@ -56,17 +60,17 @@ export function SectionCards({ stats, hasPlan = true }: SectionCardsProps) {
           <CardHeader>
             <CardDescription className="flex items-center gap-2">
               <Calendar className="h-4 w-4" />
-              Geen actief schema
+              {t("noActivePlan")}
             </CardDescription>
             <CardTitle className="text-xl font-semibold">
-              Maak je eerste trainingsschema om te beginnen
+              {t("createFirstPlan")}
             </CardTitle>
           </CardHeader>
           <CardFooter>
             <Button asChild>
               <Link href="/dashboard/plan/new">
                 <Plus className="mr-2 h-4 w-4" />
-                Maak een schema
+                {t("createPlan")}
               </Link>
             </Button>
           </CardFooter>
@@ -76,6 +80,7 @@ export function SectionCards({ stats, hasPlan = true }: SectionCardsProps) {
   }
 
   const hasActivity = data.weeklyDistance > 0 || data.weeklyTime > 0 || data.completedWorkouts > 0
+  const trainingsToGo = data.totalWorkouts - data.completedWorkouts
 
   return (
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
@@ -83,7 +88,7 @@ export function SectionCards({ stats, hasPlan = true }: SectionCardsProps) {
         <CardHeader>
           <CardDescription className="flex items-center gap-2">
             <MapPin className="h-4 w-4" />
-            Afstand deze week
+            {t("distanceThisWeek")}
           </CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
             {data.weeklyDistance.toFixed(1)} km
@@ -104,15 +109,15 @@ export function SectionCards({ stats, hasPlan = true }: SectionCardsProps) {
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
             {!hasActivity ? (
-              "Begin met trainen!"
+              t("startTraining")
             ) : data.weeklyDistanceChange >= 0 ? (
-              <>Goed bezig! <TrendingUp className="size-4 text-emerald-500" /></>
+              <>{t("goodJob")} <TrendingUp className="size-4 text-emerald-500" /></>
             ) : (
-              <>Iets minder dan vorige week <TrendingDown className="size-4 text-red-500" /></>
+              <>{t("lessThisWeek")} <TrendingDown className="size-4 text-red-500" /></>
             )}
           </div>
           <div className="text-muted-foreground">
-            {hasActivity ? "Vergeleken met vorige week" : "Nog geen activiteiten deze week"}
+            {hasActivity ? t("comparedToLastWeek") : t("noActivitiesYet")}
           </div>
         </CardFooter>
       </Card>
@@ -121,7 +126,7 @@ export function SectionCards({ stats, hasPlan = true }: SectionCardsProps) {
         <CardHeader>
           <CardDescription className="flex items-center gap-2">
             <Timer className="h-4 w-4" />
-            Trainingstijd
+            {t("trainingTime")}
           </CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
             {formatTime(data.weeklyTime)}
@@ -141,10 +146,10 @@ export function SectionCards({ stats, hasPlan = true }: SectionCardsProps) {
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            Totale actieve tijd
+            {t("totalActiveTime")}
           </div>
           <div className="text-muted-foreground">
-            Deze week
+            {t("thisWeek")}
           </div>
         </CardFooter>
       </Card>
@@ -153,7 +158,7 @@ export function SectionCards({ stats, hasPlan = true }: SectionCardsProps) {
         <CardHeader>
           <CardDescription className="flex items-center gap-2">
             <Calendar className="h-4 w-4" />
-            Trainingen
+            {t("trainings")}
           </CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
             {data.completedWorkouts}/{data.totalWorkouts}
@@ -169,12 +174,12 @@ export function SectionCards({ stats, hasPlan = true }: SectionCardsProps) {
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            Schema voortgang
+            {t("planProgress")}
           </div>
           <div className="text-muted-foreground">
-            {data.totalWorkouts - data.completedWorkouts > 0 
-              ? `${data.totalWorkouts - data.completedWorkouts} training${data.totalWorkouts - data.completedWorkouts !== 1 ? "en" : ""} nog te gaan`
-              : data.totalWorkouts > 0 ? "Alle trainingen voltooid! 🎉" : "Geen trainingen gepland"
+            {trainingsToGo > 0 
+              ? t("trainingsToGo", { count: trainingsToGo }).split("|")[trainingsToGo === 1 ? 0 : 1]?.trim()
+              : data.totalWorkouts > 0 ? t("allTrainingsCompleted") : t("noTrainingsScheduled")
             }
           </div>
         </CardFooter>
@@ -184,10 +189,10 @@ export function SectionCards({ stats, hasPlan = true }: SectionCardsProps) {
         <CardHeader>
           <CardDescription className="flex items-center gap-2">
             <Flame className="h-4 w-4" />
-            Streak
+            {t("streak")}
           </CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            {data.streak} dag{data.streak !== 1 ? "en" : ""}
+            {data.streak} {data.streak !== 1 ? tCommon("days") : tCommon("day")}
           </CardTitle>
           <CardAction>
             <Badge variant="outline" className={data.streak >= 3 ? "text-orange-500" : "text-muted-foreground"}>
@@ -197,10 +202,10 @@ export function SectionCards({ stats, hasPlan = true }: SectionCardsProps) {
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            {data.streak >= 7 ? "Fantastisch!" : data.streak >= 3 ? "Goed bezig!" : "Begin je streak!"}
+            {data.streak >= 7 ? t("fantastic") : data.streak >= 3 ? t("goodJob") : t("startYourStreak")}
           </div>
           <div className="text-muted-foreground">
-            Opeenvolgende trainingsdagen
+            {t("consecutiveTrainingDays")}
           </div>
         </CardFooter>
       </Card>

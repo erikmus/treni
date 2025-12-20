@@ -4,4 +4,5 @@ export { DeleteActivityButton } from "./delete-activity-button";
 export { SplitsTable } from "./splits-table";
 export { RouteMap } from "./route-map";
 export { ActivityVisualization } from "./activity-visualization";
+export { TrainingLog } from "./training-log";
 

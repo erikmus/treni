@@ -1,7 +1,10 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { SignupForm } from "@/components/signup-form";
 
-export default function SignupPage() {
+export default async function SignupPage() {
+  const t = await getTranslations("auth.signup");
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -35,18 +38,14 @@ export default function SignupPage() {
         <div className="absolute inset-0 flex items-center justify-center p-12">
           <div className="text-center max-w-md">
             <div className="text-6xl mb-4">🎯</div>
-            <h2 className="text-2xl font-bold mb-2">Begin je reis</h2>
+            <h2 className="text-2xl font-bold mb-2">{t("sidebarTitle")}</h2>
             <p className="text-muted-foreground">
-              Maak je persoonlijke trainingsschema en bereik je hardloopdoelen
+              {t("sidebarSubtitle")}
             </p>
             
             {/* Features list */}
             <div className="mt-8 space-y-3 text-left">
-              {[
-                "AI-gedreven persoonlijke schema's",
-                "Sync met Garmin",
-                "Adaptieve planning",
-              ].map((feature, i) => (
+              {[t("feature1"), t("feature2"), t("feature3")].map((feature, i) => (
                 <div key={i} className="flex items-center gap-3">
                   <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center">
                     <svg className="w-3 h-3 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">

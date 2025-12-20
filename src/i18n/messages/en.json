@@ -22,7 +22,20 @@
     "help": "Help",
     "user": "User",
     "saveChanges": "Save changes",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithStrava": "Continue with Strava",
+    "minCharacters": "Minimum 8 characters",
+    "today": "Today",
+    "days": "days",
+    "day": "day",
+    "week": "week",
+    "weeks": "weeks",
+    "andMore": "And {count} more...",
+    "current": "Current",
+    "recommended": "Recommended",
+    "comingSoon": "Coming soon",
+    "lastUpdated": "Last updated"
   },
   "nav": {
     "home": "Home",
@@ -35,7 +48,7 @@
     "settings": "Settings",
     "profile": "Profile",
     "integrations": "Integrations",
-    "billing": "Subscription",
+    "billing": "Account",
     "logout": "Log out",
     "newPlan": "New plan",
     "connectGarmin": "Connect Garmin",
@@ -46,7 +59,14 @@
       "title": "Your personal running coach",
       "subtitle": "Personalized training plans that adapt to your life and goals. From 5K to marathon.",
       "cta": "Start free",
-      "ctaSecondary": "See how it works"
+      "ctaSecondary": "See how it works",
+      "badge": "AI-powered training plans",
+      "stats": {
+        "goalsTitle": "Our goals for 2026",
+        "activeRunners": "Active runners",
+        "completedPlans": "Completed plans",
+        "satisfaction": "Satisfaction"
+      }
     },
     "features": {
       "title": "Why Treni?",
@@ -66,6 +86,20 @@
       "goals": {
         "title": "Every goal",
         "description": "Whether you're training for your first 5K or chasing a marathon PR - Treni has a plan for you."
+      },
+      "highlights": {
+        "fastResults": {
+          "title": "Fast results",
+          "description": "Average 15% faster in 12 weeks"
+        },
+        "injuryPrevention": {
+          "title": "Injury prevention",
+          "description": "Smart progressive loading"
+        },
+        "smartPlanning": {
+          "title": "Smart planning",
+          "description": "Adapts to your schedule"
+        }
       }
     },
     "goals": {
@@ -76,7 +110,14 @@
       "15k": "15 kilometers",
       "halfMarathon": "Half marathon",
       "marathon": "Marathon",
-      "fitness": "Stay fit"
+      "fitness": "Stay fit",
+      "typicalTime": "Typical time: {time}",
+      "schedule": "Schedule: {weeks}",
+      "startNow": "Start now",
+      "weeks": "{count} weeks",
+      "hours": "~{count} hour | ~{count} hours",
+      "flexible": "Flexible",
+      "ongoing": "Ongoing"
     },
     "howItWorks": {
       "title": "How does it work?",
@@ -101,29 +142,37 @@
       "title": "What runners say"
     },
     "pricing": {
-      "title": "Simple pricing",
-      "subtitle": "Start free, upgrade when you want",
-      "free": {
-        "name": "Free",
-        "price": "€0",
-        "period": "forever",
-        "features": [
-          "1 active training plan",
-          "Basic workouts",
-          "Manual activity logging"
-        ]
-      },
-      "pro": {
-        "name": "Pro",
-        "price": "€9.99",
-        "period": "per month",
-        "features": [
-          "Unlimited plans",
-          "Garmin sync",
-          "AI adjustments",
-          "Detailed statistics",
-          "Priority support"
-        ]
+      "title": "Get started today",
+      "subtitle": "No credit card required. Get instant access to all features.",
+      "badge": "Free to use",
+      "free": "Free",
+      "allFeaturesIncluded": "All features included",
+      "getStarted": "Get started",
+      "features": {
+        "unlimitedPlans": {
+          "title": "Unlimited training plans",
+          "description": "Create as many plans as you want for all your goals"
+        },
+        "aiPlans": {
+          "title": "AI-generated plans",
+          "description": "Smart algorithms that optimize your training"
+        },
+        "sync": {
+          "title": "Garmin & Strava sync",
+          "description": "Automatic synchronization with your favorite apps"
+        },
+        "stats": {
+          "title": "Detailed statistics",
+          "description": "Track your progress with extensive analyses"
+        },
+        "fitExport": {
+          "title": ".FIT file export",
+          "description": "Export workouts directly to your watch"
+        },
+        "import": {
+          "title": "Import activities",
+          "description": "Upload TCX/FIT files or sync automatically"
+        }
       }
     },
     "cta": {
@@ -135,15 +184,22 @@
       "description": "The smartest way to train for your running goals.",
       "product": "Product",
       "features": "Features",
-      "pricing": "Pricing",
+      "howItWorks": "How it works",
       "company": "Company",
       "about": "About",
       "contact": "Contact",
+      "blog": "Blog",
       "legal": "Legal",
       "privacy": "Privacy",
       "terms": "Terms",
-      "copyright": "© {year} Treni. All rights reserved."
-    }
+      "copyright": "© {year} Treni. All rights reserved.",
+      "madeWith": "Made with ❤️ for runners"
+    },
+    "nav": {
+      "features": "Features",
+      "howItWorks": "How it works"
+    },
+    "pageTitle": "Treni - Your personal running coach"
   },
   "auth": {
     "login": {
@@ -155,7 +211,10 @@
       "forgotPassword": "Forgot password?",
       "noAccount": "Don't have an account?",
       "signUp": "Sign up",
-      "orContinueWith": "Or continue with"
+      "orContinueWith": "Or continue with",
+      "sidebarTitle": "Welcome back!",
+      "sidebarSubtitle": "Log in to view your training plan",
+      "successMessage": "Successfully logged in!"
     },
     "signup": {
       "title": "Create account",
@@ -170,7 +229,13 @@
       "terms": "By signing up, you agree to our",
       "termsLink": "terms",
       "and": "and",
-      "privacyLink": "privacy policy"
+      "privacyLink": "privacy policy",
+      "sidebarTitle": "Start your journey",
+      "sidebarSubtitle": "Create your personal training plan and reach your running goals",
+      "feature1": "AI-powered personal plans",
+      "feature2": "Sync with Garmin",
+      "feature3": "Adaptive planning",
+      "successMessage": "Account created! Check your email to confirm."
     },
     "errors": {
       "invalidCredentials": "Invalid credentials",
@@ -181,6 +246,12 @@
   },
   "dashboard": {
     "welcome": "Welcome back, {name}!",
+    "stravaWelcome": {
+      "title": "Welcome to Treni! 🎉",
+      "description": "Your account was created via Strava. Your activities have been automatically synced. Would you like to add an email address so you can also log in without Strava?",
+      "addEmail": "Add email",
+      "later": "Maybe later"
+    },
     "todayWorkout": "Today's workout",
     "noWorkoutToday": "No workout scheduled for today",
     "upcomingWorkouts": "Upcoming workouts",
@@ -198,6 +269,7 @@
     "viewPlan": "View plan"
   },
   "workouts": {
+    "title": "Workouts",
     "types": {
       "easy_run": "Easy run",
       "long_run": "Long run",
@@ -221,11 +293,41 @@
       "distance": "Distance",
       "pace": "Pace",
       "heartRate": "Heart rate zone"
+    },
+    "empty": {
+      "title": "No workouts yet",
+      "description": "Create a training plan first to see your workouts.",
+      "cta": "Create training plan"
+    },
+    "stats": {
+      "scheduled": "Scheduled",
+      "completed": "Completed",
+      "missed": "Missed",
+      "completionRate": "Completion rate"
+    },
+    "todayScheduled": "Scheduled for today",
+    "upcoming": "Upcoming workouts",
+    "completedWorkouts": "Completed workouts",
+    "completedCount": "{count} workout | {count} workouts",
+    "detail": {
+      "description": "Description",
+      "structure": "Workout structure",
+      "coachTips": "Coach tips",
+      "goals": "Goals",
+      "minutes": "minutes",
+      "partOf": "Part of",
+      "weekOf": "Week {week} of {total}",
+      "export": "Export",
+      "downloadFit": "Download .FIT file",
+      "exportHint": "Upload to Garmin Connect or sync directly with your watch",
+      "start": "Start"
     }
   },
   "plans": {
+    "title": "Training plan",
     "create": {
       "title": "New training plan",
+      "subtitle": "Create a personalized plan based on your goals and availability",
       "selectGoal": "Select your goal",
       "selectDate": "When is your event?",
       "targetTime": "Target time (optional)",
@@ -239,7 +341,63 @@
       "paused": "Paused",
       "completed": "Completed",
       "cancelled": "Cancelled"
+    },
+    "goals": {
+      "5k": "5 Kilometers",
+      "10k": "10 Kilometers",
+      "15k": "15 Kilometers",
+      "half_marathon": "Half Marathon",
+      "marathon": "Marathon",
+      "fitness": "Stay Fit",
+      "custom": "Custom"
+    },
+    "empty": {
+      "title": "No training plan yet",
+      "description": "Create your first personalized training plan to start preparing for your running goal.",
+      "cta": "Create new plan"
+    },
+    "newPlan": "New plan",
+    "detail": {
+      "goal": "Goal",
+      "event": "Event",
+      "progress": "Progress",
+      "total": "Total",
+      "noTargetTime": "No target time",
+      "noDate": "No date",
+      "targetTime": "Target time",
+      "trainingsOf": "{completed} of {total} trainings",
+      "weeksSchedule": "{weeks} weeks schedule",
+      "percentCompleted": "{percent}% completed"
     }
+  },
+  "stats": {
+    "title": "Statistics",
+    "subtitle": "Your training progress and performance",
+    "empty": {
+      "title": "No data yet",
+      "description": "Start training to see your statistics and progress. You can also add activities manually or connect your Garmin.",
+      "createPlan": "Create plan",
+      "addActivity": "Add activity"
+    },
+    "thisWeek": "This week",
+    "trainingTime": "Training time",
+    "trainings": "Trainings",
+    "completedThisWeek": "completed this week",
+    "streak": "Streak",
+    "consecutiveActive": "consecutive active",
+    "vsLastWeek": "vs last week",
+    "personalRecords": "Personal records",
+    "estimatedRaceTimes": "Estimated race times",
+    "halfMarathon": "Half Marathon",
+    "trainMoreForPredictions": "Train more to get accurate predictions. Connect your Garmin for automatic calculations.",
+    "trainingLoad": "Training Load",
+    "fitness": "Fitness",
+    "fatigue": "Fatigue",
+    "form": "Form",
+    "last30Days": "Last 30 days",
+    "totalDistance": "Total distance",
+    "activities": "Activities",
+    "avgPace": "Avg. pace"
   },
   "settings": {
     "title": "Settings",
@@ -295,24 +453,256 @@
     },
     "integrations": {
       "title": "Integrations",
+      "subtitle": "Connect external services to sync your training data",
       "garmin": {
         "title": "Garmin Connect",
+        "description": "Sync activities and send workouts to your Garmin watch",
         "connected": "Connected",
         "notConnected": "Not connected",
         "connect": "Connect",
-        "disconnect": "Disconnect"
+        "disconnect": "Disconnect",
+        "connectWith": "Connect with Garmin",
+        "features": {
+          "import": "Automatically import activities",
+          "export": "Send workouts to watch",
+          "heartRate": "Sync heart rate zones"
+        }
+      },
+      "strava": {
+        "title": "Strava",
+        "description": "Automatically import activities from Strava",
+        "connected": "Connected",
+        "notConnected": "Not connected",
+        "connect": "Connect",
+        "disconnect": "Disconnect",
+        "connectWith": "Connect with Strava",
+        "syncing": "Syncing...",
+        "sync": "Sync activities",
+        "syncNow": "Sync now",
+        "lastSync": "Last synced",
+        "features": {
+          "import": "Automatically import activities",
+          "segments": "GPS routes and splits",
+          "heartRate": "Heart rate and pace data"
+        },
+        "syncSuccess": "{count} activity synced | {count} activities synced",
+        "syncError": "Something went wrong while syncing",
+        "disconnected": "Strava disconnected",
+        "disconnectError": "Something went wrong while disconnecting"
+      },
+      "manual": {
+        "hint": "No Garmin or Strava? You can always",
+        "importLink": "import TCX/GPX files manually"
       }
     },
     "notifications": {
       "title": "Notifications",
+      "subtitle": "Decide how and when you receive notifications",
       "email": "Email notifications",
       "push": "Push notifications",
-      "workoutReminders": "Workout reminders"
+      "workoutReminders": "Workout reminders",
+      "workoutRemindersDesc": "Receive a reminder for scheduled trainings",
+      "weeklySummary": "Weekly summary",
+      "weeklySummaryDesc": "Overview of your training week",
+      "tipsAndUpdates": "Tips and updates",
+      "tipsAndUpdatesDesc": "Training tips and new features",
+      "pushWorkoutReminders": "Workout reminders",
+      "pushWorkoutRemindersDesc": "Push notification for scheduled trainings",
+      "achievements": "Achievements",
+      "achievementsDesc": "Notifications for new PRs and milestones",
+      "calendarIntegration": "Calendar integration",
+      "syncWithCalendar": "Sync with calendar",
+      "syncWithCalendarDesc": "Automatically add workouts to your calendar",
+      "autoSave": "Changes are saved automatically."
+    },
+    "billing": {
+      "title": "Subscription",
+      "subtitle": "Manage your subscription and billing",
+      "currentPlan": "Current plan",
+      "freePlan": "Free plan",
+      "freePlanDesc": "Basic features for runners",
+      "included": "Included:",
+      "freeFeatures": {
+        "plan": "1 active training plan",
+        "stats": "Basic statistics",
+        "import": "Import activities"
+      },
+      "proPlan": "Pro",
+      "proPlanDesc": "Everything you need to reach your goals",
+      "proPrice": "€9",
+      "proYearlyPrice": "or €89/year (save 17%)",
+      "allFromFree": "All from Free, plus:",
+      "proFeatures": {
+        "unlimitedPlans": "Unlimited training plans",
+        "aiPlans": "AI-generated plans",
+        "advancedStats": "Advanced statistics & analyses",
+        "integrations": "Garmin & Strava integration",
+        "export": "Export to Garmin watch",
+        "support": "Priority support"
+      },
+      "upgradeToPro": "Upgrade to Pro",
+      "trialInfo": "14 days free trial • Cancel anytime",
+      "faq": {
+        "title": "Frequently asked questions",
+        "cancelQuestion": "How can I cancel?",
+        "cancelAnswer": "You can cancel your subscription at any time. You'll keep access to Pro features until the end of your billing period.",
+        "paymentQuestion": "What payment methods are accepted?",
+        "paymentAnswer": "We accept all major credit cards and iDEAL.",
+        "refundQuestion": "Can I change my mind?",
+        "refundAnswer": "Yes, we offer a 14-day money-back guarantee if you're not satisfied."
+      }
     },
     "danger": {
       "title": "Danger zone",
       "deleteAccount": "Delete account",
       "deleteWarning": "This action cannot be undone."
+    }
+  },
+  "oauth": {
+    "error": "Error",
+    "missingAuthId": "Missing authorization_id parameter",
+    "invalidRequest": "Invalid request",
+    "invalidAuthRequest": "Invalid authorization request",
+    "authorize": "Authorize {app}",
+    "wantsAccess": "This application wants access to your Treni account",
+    "requestsPermission": "This app requests permission to:",
+    "loggedInAs": "You are logged in as",
+    "allow": "Allow",
+    "deny": "Deny",
+    "consentFooter": "By giving permission, you allow this app to use the above information according to their",
+    "privacyPolicy": "privacy policy",
+    "scopes": {
+      "openid": "Verify your identity",
+      "email": "View your email address",
+      "profile": "View your profile information",
+      "phone": "View your phone number"
+    }
+  },
+  "sectionCards": {
+    "noActivePlan": "No active plan",
+    "createFirstPlan": "Create your first training plan to get started",
+    "createPlan": "Create a plan",
+    "distanceThisWeek": "Distance this week",
+    "trainingTime": "Training time",
+    "trainings": "Trainings",
+    "streak": "Streak",
+    "startTraining": "Start training!",
+    "goodJob": "Good job!",
+    "lessThisWeek": "A bit less than last week",
+    "comparedToLastWeek": "Compared to last week",
+    "noActivitiesYet": "No activities this week yet",
+    "totalActiveTime": "Total active time",
+    "thisWeek": "This week",
+    "planProgress": "Plan progress",
+    "trainingsToGo": "{count} training to go | {count} trainings to go",
+    "allTrainingsCompleted": "All trainings completed! 🎉",
+    "noTrainingsScheduled": "No trainings scheduled",
+    "fantastic": "Fantastic!",
+    "startYourStreak": "Start your streak!",
+    "consecutiveTrainingDays": "Consecutive training days"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "intro": "At Treni, we value your privacy. This privacy policy describes how we collect, use, and protect your personal data when you use our services.",
+    "section1": {
+      "title": "1. What data do we collect?",
+      "accountData": "Account data",
+      "accountDataIntro": "When you create an account, we collect:",
+      "accountDataItems": [
+        "Name and email address",
+        "Profile photo (if you upload one or log in via Google)",
+        "Password (stored encrypted)",
+        "Language preference"
+      ],
+      "trainingData": "Training data",
+      "trainingDataIntro": "To create personalized training plans, we collect:",
+      "trainingDataItems": [
+        "Experience level and training goals",
+        "Available training hours and preferred days",
+        "Completed trainings and activities",
+        "Performance metrics such as distance, pace, heart rate, and elevation",
+        "GPS routes (if available)"
+      ],
+      "thirdParty": "Third-party integrations",
+      "thirdPartyIntro": "If you choose to connect external services, we may receive data from:",
+      "garminData": "Training data, activities, and performance statistics that you sync",
+      "googleData": "Name, email address, and profile photo when you log in with Google"
+    },
+    "section2": {
+      "title": "2. What do we use your data for?",
+      "intro": "We use your data for the following purposes:",
+      "service": "Service delivery:",
+      "serviceDesc": "Creating and managing your account, generating personalized training plans",
+      "personalization": "Personalization:",
+      "personalizationDesc": "Adapting trainings to your level, availability, and goals",
+      "progress": "Track progress:",
+      "progressDesc": "Showing statistics and progress towards your goals",
+      "communication": "Communication:",
+      "communicationDesc": "Sending training reminders and important account notifications (if enabled)",
+      "improvement": "Improvement:",
+      "improvementDesc": "Analyzing usage patterns to improve our services"
+    },
+    "section3": {
+      "title": "3. How do we protect your data?",
+      "intro": "We take the security of your data seriously and have implemented the following measures:",
+      "items": [
+        "All data is transmitted encrypted via HTTPS",
+        "Passwords are hashed using modern algorithms",
+        "Our database has Row Level Security (RLS) enabled",
+        "Access to data is limited to what is strictly necessary",
+        "Regular security audits and updates"
+      ]
+    },
+    "section4": {
+      "title": "4. Who do we share your data with?",
+      "intro": "We never sell your data to third parties. We may share data with:",
+      "providers": "Service providers:",
+      "providersDesc": "Parties that help us deliver our services (hosting, email), under strict confidentiality agreements",
+      "partners": "Integration partners:",
+      "partnersDesc": "Only the data necessary for the integrations you choose (such as Garmin)",
+      "legal": "Legal obligations:",
+      "legalDesc": "If we are legally required to do so"
+    },
+    "section5": {
+      "title": "5. Your rights",
+      "intro": "Under the GDPR (General Data Protection Regulation), you have the following rights:",
+      "access": "Access:",
+      "accessDesc": "You can request what data we have about you",
+      "correction": "Correction:",
+      "correctionDesc": "You can have incorrect data corrected",
+      "deletion": "Deletion:",
+      "deletionDesc": "You can request that your data be deleted",
+      "portability": "Portability:",
+      "portabilityDesc": "You can request a copy of your data",
+      "objection": "Objection:",
+      "objectionDesc": "You can object to certain uses of your data",
+      "exerciseRights": "To exercise these rights, you can contact us at the email address at the bottom of this page."
+    },
+    "section6": {
+      "title": "6. Cookies and tracking",
+      "intro": "We only use functional cookies that are necessary for the website to function, such as:",
+      "items": [
+        "Session cookies to keep you logged in",
+        "Language preference cookie"
+      ],
+      "noTracking": "We do not use tracking cookies or third-party analytics that can personally identify you."
+    },
+    "section7": {
+      "title": "7. Retention periods",
+      "content": "We retain your data as long as your account is active. After deleting your account, your data will be permanently deleted within 30 days, unless we are legally required to retain it longer."
+    },
+    "section8": {
+      "title": "8. Changes to this policy",
+      "content": "We may update this privacy policy from time to time. For significant changes, we will notify you via email or a notification in the app. The date at the top of this document indicates when the policy was last updated."
+    },
+    "section9": {
+      "title": "9. Contact",
+      "intro": "Do you have questions about this privacy policy or would you like to exercise your rights? Contact us:",
+      "email": "Email:"
+    },
+    "footer": {
+      "agreement": "By using Treni, you agree to this privacy policy. Also see our",
+      "termsLink": "terms and conditions"
     }
   },
   "experienceLevels": {
@@ -343,6 +733,50 @@
     "bpm": "bpm",
     "perKm": "/km",
     "perMi": "/mi"
+  },
+  "about": {
+    "title": "About Treni",
+    "intro": "A personal project born from a passion for running and the possibilities of AI.",
+    "badge": "100% built with Cursor",
+    "founder": {
+      "name": "Erik Mus",
+      "role": "Founder & Developer",
+      "story1": "I started Treni because I was looking for a fun project to build with Cursor in the coming period - something I could actually use myself. In general, I find personalized training plans quite expensive.",
+      "story2": "I hope that through feedback from other runners, I can create a nice, accessible alternative. In the coming months, I'll be using it myself to really get fitter again in 2026. The more people join and give feedback, the better Treni will become.",
+      "story3": "This is all driven by my fascination with AI, vibe coding, and the incredible possibilities this has brought in recent times."
+    },
+    "nameOrigin": {
+      "title": "Why 'Treni'?",
+      "story1": "I was born in Kenya, where running is obviously huge. When I was looking for a nice name for this project, I decided to translate 'trainen' (Dutch for 'to train') to Swahili using Google Translate.",
+      "story2": "The result: Treni. A short, powerful name that fit perfectly.",
+      "story3": "Later I discovered that if you translate 'Treni' from Swahili back to Dutch, you actually get 'treinen' (trains). 🚂",
+      "story4": "But hey, the name was already set and I still liked it. So Treni it stays!"
+    },
+    "cursor": {
+      "title": "Built with Cursor",
+      "subtitle": "AI-powered development",
+      "description": "Treni is 100% built with Cursor - an AI-powered code editor. This project is a testament to what's possible when combining the creativity of a developer with the power of modern AI tools. Every line of code, from the database schema to the frontend animations, was crafted through this collaboration."
+    },
+    "mission": {
+      "title": "What drives us",
+      "accessible": {
+        "title": "Accessible",
+        "description": "Quality training plans shouldn't cost a fortune. Treni aims to make personalized coaching available to everyone."
+      },
+      "community": {
+        "title": "Community-driven",
+        "description": "Your feedback shapes Treni. Together we're building something that truly works for runners."
+      },
+      "improvement": {
+        "title": "Continuous improvement",
+        "description": "Every week Treni gets better. New features, smarter algorithms, and a better user experience."
+      }
+    },
+    "cta": {
+      "title": "Join the journey",
+      "description": "Be part of building the future of accessible running coaching. Start training with Treni and share your feedback.",
+      "getStarted": "Get started for free",
+      "contact": "Send feedback"
+    }
   }
 }
-

@@ -5,12 +5,12 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 const goals = [
-  { key: "5k", distance: "5K", time: "~30 min", weeks: "8 weken", color: "from-emerald-500 to-emerald-600" },
-  { key: "10k", distance: "10K", time: "~60 min", weeks: "10 weken", color: "from-blue-500 to-blue-600" },
-  { key: "15k", distance: "15K", time: "~90 min", weeks: "12 weken", color: "from-violet-500 to-violet-600" },
-  { key: "halfMarathon", distance: "21.1K", time: "~2 uur", weeks: "14 weken", color: "from-primary to-orange-600" },
-  { key: "marathon", distance: "42.2K", time: "~4 uur", weeks: "18 weken", color: "from-rose-500 to-rose-600" },
-  { key: "fitness", distance: "∞", time: "Flexibel", weeks: "Doorlopend", color: "from-accent to-teal-600" },
+  { key: "5k", distance: "5K", timeMin: 30, weeksCount: 8, color: "from-emerald-500 to-emerald-600" },
+  { key: "10k", distance: "10K", timeMin: 60, weeksCount: 10, color: "from-blue-500 to-blue-600" },
+  { key: "15k", distance: "15K", timeMin: 90, weeksCount: 12, color: "from-violet-500 to-violet-600" },
+  { key: "halfMarathon", distance: "21.1K", hoursCount: 2, weeksCount: 14, color: "from-primary to-orange-600" },
+  { key: "marathon", distance: "42.2K", hoursCount: 4, weeksCount: 18, color: "from-rose-500 to-rose-600" },
+  { key: "fitness", distance: "∞", flexible: true, ongoing: true, color: "from-accent to-teal-600" },
 ];
 
 export function GoalsSection() {
@@ -51,13 +51,23 @@ export function GoalsSection() {
               </h3>
               
               <div className="space-y-1 text-sm text-muted-foreground mb-4">
-                <p>Typische tijd: {goal.time}</p>
-                <p>Schema: {goal.weeks}</p>
+                <p>{t("typicalTime", { 
+                  time: goal.flexible 
+                    ? t("flexible") 
+                    : goal.hoursCount 
+                      ? `~${goal.hoursCount} ${goal.hoursCount === 1 ? 'hour' : 'hours'}`
+                      : `~${goal.timeMin} min`
+                })}</p>
+                <p>{t("schedule", { 
+                  weeks: goal.ongoing 
+                    ? t("ongoing") 
+                    : t("weeks", { count: goal.weeksCount })
+                })}</p>
               </div>
 
               {/* Arrow */}
               <div className="flex items-center text-primary font-medium text-sm group-hover:gap-2 transition-all">
-                <span>Start nu</span>
+                <span>{t("startNow")}</span>
                 <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>

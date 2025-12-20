@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { format, subDays, startOfWeek, endOfWeek, eachDayOfInterval, isSameDay } from "date-fns";
-import { nl } from "date-fns/locale";
+import { nl, enUS } from "date-fns/locale";
+import { getTranslations, getLocale } from "next-intl/server";
 import { 
   ChartLine,
   TrendingUp,
@@ -25,11 +26,11 @@ function formatPace(secondsPerKm: number | null): string {
   return `${mins}:${secs.toString().padStart(2, "0")}`;
 }
 
-function formatTime(minutes: number): string {
+function formatTime(minutes: number, locale: string): string {
   const hours = Math.floor(minutes / 60);
   const mins = Math.round(minutes % 60);
   if (hours > 0) {
-    return `${hours}u ${mins}m`;
+    return locale === "nl" ? `${hours}u ${mins}m` : `${hours}h ${mins}m`;
   }
   return `${mins}m`;
 }
@@ -48,6 +49,9 @@ function formatRaceTime(seconds: number): string {
 export default async function StatsPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+  const t = await getTranslations("stats");
+  const locale = await getLocale();
+  const dateLocale = locale === "nl" ? nl : enUS;
 
   if (!user) {
     redirect("/login");
@@ -155,9 +159,9 @@ export default async function StatsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Statistieken</h1>
+            <h1 className="text-3xl font-bold">{t("title")}</h1>
             <p className="text-muted-foreground mt-1">
-              Analyseer je voortgang en prestaties
+              {t("subtitle")}
             </p>
           </div>
         </div>
@@ -168,20 +172,19 @@ export default async function StatsPage() {
             <div className="rounded-full bg-primary/10 w-20 h-20 flex items-center justify-center mx-auto mb-6">
               <ChartLine className="h-10 w-10 text-primary" />
             </div>
-            <h2 className="text-2xl font-bold mb-4">Nog geen data</h2>
+            <h2 className="text-2xl font-bold mb-4">{t("empty.title")}</h2>
             <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-              Start met trainen om je statistieken en voortgang te zien.
-              Je kunt ook activiteiten handmatig toevoegen of je Garmin koppelen.
+              {t("empty.description")}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild>
                 <Link href="/dashboard/plan/new">
-                  Schema maken
+                  {t("empty.createPlan")}
                 </Link>
               </Button>
               <Button variant="outline" asChild>
                 <Link href="/dashboard/activities/new">
-                  Activiteit toevoegen
+                  {t("empty.addActivity")}
                 </Link>
               </Button>
             </div>
@@ -196,9 +199,9 @@ export default async function StatsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Statistieken</h1>
+          <h1 className="text-3xl font-bold">{t("title")}</h1>
           <p className="text-muted-foreground mt-1">
-            Je trainingsvoortgang en prestaties
+            {t("subtitle")}
           </p>
         </div>
       </div>
@@ -208,7 +211,7 @@ export default async function StatsPage() {
         <div className="bg-card rounded-xl border p-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
             <MapPin className="h-4 w-4" />
-            Deze week
+            {t("thisWeek")}
           </div>
           <p className="text-2xl font-bold">{thisWeekDistance.toFixed(1)} km</p>
           <div className="flex items-center gap-1 mt-1">
@@ -221,7 +224,7 @@ export default async function StatsPage() {
               "text-xs",
               distanceChange >= 0 ? "text-emerald-600" : "text-red-600"
             )}>
-              {distanceChange >= 0 ? "+" : ""}{distanceChange}% vs vorige week
+              {distanceChange >= 0 ? "+" : ""}{distanceChange}% {t("vsLastWeek")}
             </span>
           </div>
         </div>
@@ -229,9 +232,9 @@ export default async function StatsPage() {
         <div className="bg-card rounded-xl border p-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
             <Clock className="h-4 w-4" />
-            Trainingstijd
+            {t("trainingTime")}
           </div>
-          <p className="text-2xl font-bold">{formatTime(thisWeekDuration)}</p>
+          <p className="text-2xl font-bold">{formatTime(thisWeekDuration, locale)}</p>
           <div className="flex items-center gap-1 mt-1">
             {durationChange >= 0 ? (
               <TrendingUp className="h-3.5 w-3.5 text-emerald-500" />
@@ -242,7 +245,7 @@ export default async function StatsPage() {
               "text-xs",
               durationChange >= 0 ? "text-emerald-600" : "text-red-600"
             )}>
-              {durationChange >= 0 ? "+" : ""}{durationChange}% vs vorige week
+              {durationChange >= 0 ? "+" : ""}{durationChange}% {t("vsLastWeek")}
             </span>
           </div>
         </div>
@@ -250,34 +253,34 @@ export default async function StatsPage() {
         <div className="bg-card rounded-xl border p-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
             <Calendar className="h-4 w-4" />
-            Trainingen
+            {t("trainings")}
           </div>
           <p className="text-2xl font-bold">{completedThisWeek}</p>
           <p className="text-xs text-muted-foreground mt-1">
-            deze week voltooid
+            {t("completedThisWeek")}
           </p>
         </div>
 
         <div className="bg-card rounded-xl border p-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
             <Flame className="h-4 w-4 text-orange-500" />
-            Streak
+            {t("streak")}
           </div>
-          <p className="text-2xl font-bold">{streak} dag{streak !== 1 ? "en" : ""}</p>
+          <p className="text-2xl font-bold">{streak} {streak !== 1 ? (locale === "nl" ? "dagen" : "days") : (locale === "nl" ? "dag" : "day")}</p>
           <p className="text-xs text-muted-foreground mt-1">
-            opeenvolgend actief
+            {t("consecutiveActive")}
           </p>
         </div>
       </div>
 
       {/* Weekly Activity Heatmap */}
       <div className="bg-card rounded-xl border p-6">
-        <h2 className="font-semibold mb-4">Deze week</h2>
+        <h2 className="font-semibold mb-4">{t("thisWeek")}</h2>
         <div className="grid grid-cols-7 gap-2">
           {activityByDay.map((day, i) => (
             <div key={i} className="text-center">
               <p className="text-xs text-muted-foreground mb-2">
-                {format(day.date, "EEE", { locale: nl })}
+                {format(day.date, "EEE", { locale: dateLocale })}
               </p>
               <div className={cn(
                 "aspect-square rounded-lg flex items-center justify-center text-sm font-medium transition-colors",
@@ -288,7 +291,7 @@ export default async function StatsPage() {
                 {day.distance > 0 ? `${day.distance.toFixed(1)}` : "-"}
               </div>
               <p className="text-xs text-muted-foreground mt-1">
-                {format(day.date, "d", { locale: nl })}
+                {format(day.date, "d", { locale: dateLocale })}
               </p>
             </div>
           ))}
@@ -304,7 +307,7 @@ export default async function StatsPage() {
         <div className="bg-card rounded-xl border p-6">
           <h2 className="font-semibold mb-4 flex items-center gap-2">
             <Target className="h-5 w-5 text-primary" />
-            Geschatte wedstrijdtijden
+            {t("estimatedRaceTimes")}
           </h2>
           {latestStats ? (
             <div className="space-y-3">
@@ -322,7 +325,7 @@ export default async function StatsPage() {
               )}
               {latestStats.estimated_half_marathon_seconds && (
                 <div className="flex items-center justify-between py-2 border-b">
-                  <span className="text-muted-foreground">Halve Marathon</span>
+                  <span className="text-muted-foreground">{t("halfMarathon")}</span>
                   <span className="font-semibold">{formatRaceTime(latestStats.estimated_half_marathon_seconds)}</span>
                 </div>
               )}
@@ -346,8 +349,7 @@ export default async function StatsPage() {
             </div>
           ) : (
             <p className="text-muted-foreground text-sm">
-              Train meer om nauwkeurige voorspellingen te krijgen. 
-              Koppel je Garmin voor automatische berekeningen.
+              {t("trainMoreForPredictions")}
             </p>
           )}
         </div>
@@ -356,18 +358,18 @@ export default async function StatsPage() {
       {/* Training Load Overview */}
       {latestStats && (latestStats.fitness_score || latestStats.fatigue_score) && (
         <div className="bg-card rounded-xl border p-6">
-          <h2 className="font-semibold mb-4">Training Load</h2>
+          <h2 className="font-semibold mb-4">{t("trainingLoad")}</h2>
           <div className="grid grid-cols-3 gap-4">
             {latestStats.fitness_score && (
               <div className="text-center">
                 <div className="text-3xl font-bold text-emerald-600">{latestStats.fitness_score}</div>
-                <p className="text-sm text-muted-foreground">Fitness</p>
+                <p className="text-sm text-muted-foreground">{t("fitness")}</p>
               </div>
             )}
             {latestStats.fatigue_score && (
               <div className="text-center">
                 <div className="text-3xl font-bold text-orange-600">{latestStats.fatigue_score}</div>
-                <p className="text-sm text-muted-foreground">Vermoeidheid</p>
+                <p className="text-sm text-muted-foreground">{t("fatigue")}</p>
               </div>
             )}
             {latestStats.fitness_score && latestStats.fatigue_score && (
@@ -380,7 +382,7 @@ export default async function StatsPage() {
                 )}>
                   {latestStats.fitness_score - latestStats.fatigue_score}
                 </div>
-                <p className="text-sm text-muted-foreground">Vorm</p>
+                <p className="text-sm text-muted-foreground">{t("form")}</p>
               </div>
             )}
           </div>
@@ -389,25 +391,25 @@ export default async function StatsPage() {
 
       {/* Monthly Summary */}
       <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl border border-primary/20 p-6">
-        <h2 className="font-semibold mb-4">Afgelopen 30 dagen</h2>
+        <h2 className="font-semibold mb-4">{t("last30Days")}</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           <div>
             <p className="text-2xl font-bold">
               {((recentActivities?.reduce((sum, a) => sum + (Number(a.distance_meters) || 0), 0) || 0) / 1000).toFixed(1)} km
             </p>
-            <p className="text-sm text-muted-foreground">Totale afstand</p>
+            <p className="text-sm text-muted-foreground">{t("totalDistance")}</p>
           </div>
           <div>
             <p className="text-2xl font-bold">
               {recentActivities?.length || 0}
             </p>
-            <p className="text-sm text-muted-foreground">Activiteiten</p>
+            <p className="text-sm text-muted-foreground">{t("activities")}</p>
           </div>
           <div>
             <p className="text-2xl font-bold">
-              {formatTime((recentActivities?.reduce((sum, a) => sum + (a.duration_seconds || 0), 0) || 0) / 60)}
+              {formatTime((recentActivities?.reduce((sum, a) => sum + (a.duration_seconds || 0), 0) || 0) / 60, locale)}
             </p>
-            <p className="text-sm text-muted-foreground">Trainingstijd</p>
+            <p className="text-sm text-muted-foreground">{t("trainingTime")}</p>
           </div>
           <div>
             <p className="text-2xl font-bold">
@@ -416,11 +418,10 @@ export default async function StatsPage() {
                 : "-"
               }
             </p>
-            <p className="text-sm text-muted-foreground">Gem. tempo</p>
+            <p className="text-sm text-muted-foreground">{t("avgPace")}</p>
           </div>
         </div>
       </div>
     </div>
   );
 }
-

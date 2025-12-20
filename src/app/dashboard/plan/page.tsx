@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Plus } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { CalendarView, DeletePlanButton } from "@/components/plan";
 import { createClient } from "@/lib/supabase/server";
@@ -8,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 export default async function PlanOverviewPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+  const t = await getTranslations("plans");
 
   if (!user) {
     redirect("/login");
@@ -40,15 +42,14 @@ export default async function PlanOverviewPage() {
           <div className="rounded-full bg-primary/10 w-20 h-20 flex items-center justify-center mx-auto mb-6">
             <span className="text-4xl">🏃</span>
           </div>
-          <h1 className="text-2xl font-bold mb-4">Nog geen trainingsschema</h1>
+          <h1 className="text-2xl font-bold mb-4">{t("empty.title")}</h1>
           <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-            Maak je eerste gepersonaliseerde trainingsschema om te beginnen met je
-            voorbereiding op je hardloopdoel.
+            {t("empty.description")}
           </p>
           <Button asChild size="lg">
             <Link href="/dashboard/plan/new">
               <Plus className="mr-2 h-5 w-5" />
-              Nieuw schema maken
+              {t("empty.cta")}
             </Link>
           </Button>
         </div>
@@ -71,7 +72,7 @@ export default async function PlanOverviewPage() {
           <Button variant="outline" asChild>
             <Link href="/dashboard/plan/new">
               <Plus className="mr-2 h-4 w-4" />
-              Nieuw schema
+              {t("newPlan")}
             </Link>
           </Button>
         </div>
@@ -82,4 +83,3 @@ export default async function PlanOverviewPage() {
     </div>
   );
 }
-

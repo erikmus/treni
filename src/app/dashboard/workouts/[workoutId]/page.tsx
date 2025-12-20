@@ -1,7 +1,8 @@
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { format } from "date-fns";
-import { nl } from "date-fns/locale";
+import { nl, enUS } from "date-fns/locale";
+import { getTranslations, getLocale } from "next-intl/server";
 import {
   Clock,
   MapPin,
@@ -37,19 +38,6 @@ const workoutTypeColors: Record<string, { bg: string; text: string; border: stri
   rest: { bg: "bg-gray-500/10", text: "text-gray-700", border: "border-gray-200" },
 };
 
-const workoutTypeLabels: Record<string, string> = {
-  easy_run: "Rustige duurloop",
-  long_run: "Lange duurloop",
-  tempo_run: "Tempo",
-  interval: "Interval",
-  fartlek: "Fartlek",
-  recovery: "Herstel",
-  hill_training: "Heuveltraining",
-  race_pace: "Wedstrijdtempo",
-  cross_training: "Cross-training",
-  rest: "Rust",
-};
-
 const workoutTypeIcons: Record<string, string> = {
   easy_run: "🏃",
   long_run: "🏃‍♂️",
@@ -70,8 +58,8 @@ const goalDistances: Record<string, number> = {
   "15k": 15,
   "half_marathon": 21.0975,
   "marathon": 42.195,
-  "fitness": 5, // Default for fitness goals
-  "custom": 10, // Default for custom goals
+  "fitness": 5,
+  "custom": 10,
 };
 
 // Calculate race pace in seconds per km based on training plan
@@ -83,8 +71,6 @@ function calculateRacePaceSeconds(trainingPlan: { goal_type: string; target_time
   const distanceKm = goalDistances[trainingPlan.goal_type];
   if (!distanceKm) return undefined;
   
-  // target_time_minutes / distance_km = minutes per km
-  // Convert to seconds per km
   const paceMinutesPerKm = trainingPlan.target_time_minutes / distanceKm;
   return Math.round(paceMinutesPerKm * 60);
 }
@@ -94,6 +80,9 @@ export default async function WorkoutDetailPage({ params }: WorkoutPageProps) {
   
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+  const t = await getTranslations("workouts");
+  const locale = await getLocale();
+  const dateLocale = locale === "nl" ? nl : enUS;
 
   if (!user) {
     redirect("/login");
@@ -113,7 +102,8 @@ export default async function WorkoutDetailPage({ params }: WorkoutPageProps) {
 
   const colors = workoutTypeColors[workout.workout_type] || workoutTypeColors.easy_run;
   const icon = workoutTypeIcons[workout.workout_type] || "🏃";
-  const typeLabel = workoutTypeLabels[workout.workout_type] || workout.workout_type;
+  const workoutTypeKey = `types.${workout.workout_type}` as const;
+  const typeLabel = t.has(workoutTypeKey) ? t(workoutTypeKey) : workout.workout_type;
   const isCompleted = workout.status === "completed";
   const workoutDate = new Date(workout.scheduled_date);
 
@@ -143,14 +133,14 @@ export default async function WorkoutDetailPage({ params }: WorkoutPageProps) {
               {isCompleted && (
                 <Badge className="bg-emerald-500">
                   <Check className="mr-1 h-3 w-3" />
-                  Voltooid
+                  {t("status.completed")}
                 </Badge>
               )}
             </div>
             <h1 className="text-2xl font-bold">{workout.title}</h1>
             <p className="text-muted-foreground flex items-center gap-2 mt-1">
               <Calendar className="h-4 w-4" />
-              {format(workoutDate, "EEEE d MMMM yyyy", { locale: nl })}
+              {format(workoutDate, "EEEE d MMMM yyyy", { locale: dateLocale })}
             </p>
           </div>
         </div>
@@ -166,7 +156,7 @@ export default async function WorkoutDetailPage({ params }: WorkoutPageProps) {
           {!isCompleted && (
             <Button>
               <Play className="mr-2 h-4 w-4" />
-              Start
+              {t("detail.start")}
             </Button>
           )}
         </div>
@@ -178,7 +168,7 @@ export default async function WorkoutDetailPage({ params }: WorkoutPageProps) {
           {/* Description */}
           {workout.description && (
             <div className="bg-card rounded-xl border p-6">
-              <h2 className="font-semibold mb-3">Beschrijving</h2>
+              <h2 className="font-semibold mb-3">{t("detail.description")}</h2>
               <p className="text-muted-foreground whitespace-pre-wrap">
                 {workout.description}
               </p>
@@ -188,7 +178,7 @@ export default async function WorkoutDetailPage({ params }: WorkoutPageProps) {
           {/* Workout Structure */}
           {workout.workout_structure && (
             <div className="bg-card rounded-xl border p-6">
-              <h2 className="font-semibold mb-4">Trainingsopbouw</h2>
+              <h2 className="font-semibold mb-4">{t("detail.structure")}</h2>
               <WorkoutStructure 
                 structure={workout.workout_structure as unknown as WorkoutStructureData} 
                 racePaceSeconds={calculateRacePaceSeconds(workout.training_plans)}
@@ -200,7 +190,7 @@ export default async function WorkoutDetailPage({ params }: WorkoutPageProps) {
           {workout.coach_notes && (
             <div className="bg-primary/5 border border-primary/20 rounded-xl p-6">
               <h2 className="font-semibold mb-3 flex items-center gap-2">
-                <span>💡</span> Coach tips
+                <span>💡</span> {t("detail.coachTips")}
               </h2>
               <p className="text-muted-foreground whitespace-pre-wrap">
                 {workout.coach_notes}
@@ -213,7 +203,7 @@ export default async function WorkoutDetailPage({ params }: WorkoutPageProps) {
         <div className="space-y-6">
           {/* Quick Stats */}
           <div className="bg-card rounded-xl border p-6">
-            <h2 className="font-semibold mb-4">Doelen</h2>
+            <h2 className="font-semibold mb-4">{t("detail.goals")}</h2>
             <div className="space-y-4">
               {workout.target_duration_minutes && (
                 <div className="flex items-center gap-3">
@@ -221,8 +211,8 @@ export default async function WorkoutDetailPage({ params }: WorkoutPageProps) {
                     <Clock className="h-5 w-5 text-muted-foreground" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Duur</p>
-                    <p className="font-semibold">{workout.target_duration_minutes} minuten</p>
+                    <p className="text-sm text-muted-foreground">{t("details.duration")}</p>
+                    <p className="font-semibold">{workout.target_duration_minutes} {t("detail.minutes")}</p>
                   </div>
                 </div>
               )}
@@ -232,7 +222,7 @@ export default async function WorkoutDetailPage({ params }: WorkoutPageProps) {
                     <MapPin className="h-5 w-5 text-muted-foreground" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Afstand</p>
+                    <p className="text-sm text-muted-foreground">{t("details.distance")}</p>
                     <p className="font-semibold">{Number(workout.target_distance_km).toFixed(1)} km</p>
                   </div>
                 </div>
@@ -243,7 +233,7 @@ export default async function WorkoutDetailPage({ params }: WorkoutPageProps) {
                     <Target className="h-5 w-5 text-muted-foreground" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Tempo</p>
+                    <p className="text-sm text-muted-foreground">{t("details.pace")}</p>
                     <p className="font-semibold">{formatPace(Number(workout.target_pace_min_per_km))}</p>
                   </div>
                 </div>
@@ -254,7 +244,7 @@ export default async function WorkoutDetailPage({ params }: WorkoutPageProps) {
                     <Heart className="h-5 w-5 text-muted-foreground" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Hartslag zone</p>
+                    <p className="text-sm text-muted-foreground">{t("details.heartRate")}</p>
                     <p className="font-semibold">Zone {workout.target_heart_rate_zone}</p>
                   </div>
                 </div>
@@ -265,14 +255,14 @@ export default async function WorkoutDetailPage({ params }: WorkoutPageProps) {
           {/* Plan Info */}
           {workout.training_plans && (
             <div className="bg-card rounded-xl border p-6">
-              <h2 className="font-semibold mb-3">Onderdeel van</h2>
+              <h2 className="font-semibold mb-3">{t("detail.partOf")}</h2>
               <Link
                 href={`/dashboard/plan/${workout.training_plans.id}`}
                 className="block p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
               >
                 <p className="font-medium">{workout.training_plans.name}</p>
                 <p className="text-sm text-muted-foreground">
-                  Week {workout.week_number} van {workout.training_plans.weeks_duration}
+                  {t("detail.weekOf", { week: workout.week_number ?? 1, total: workout.training_plans.weeks_duration ?? 1 })}
                 </p>
               </Link>
             </div>
@@ -280,16 +270,16 @@ export default async function WorkoutDetailPage({ params }: WorkoutPageProps) {
 
           {/* Export Actions */}
           <div className="bg-card rounded-xl border p-6">
-            <h2 className="font-semibold mb-4">Exporteren</h2>
+            <h2 className="font-semibold mb-4">{t("detail.export")}</h2>
             <div className="space-y-2">
               <Button variant="outline" className="w-full justify-start" asChild>
                 <Link href={`/api/workouts/${workoutId}/fit`} download>
                   <Download className="mr-2 h-4 w-4" />
-                  Download .FIT bestand
+                  {t("detail.downloadFit")}
                 </Link>
               </Button>
               <p className="text-xs text-muted-foreground mt-2">
-                Upload naar Garmin Connect of sync direct met je horloge
+                {t("detail.exportHint")}
               </p>
             </div>
           </div>
@@ -298,4 +288,3 @@ export default async function WorkoutDetailPage({ params }: WorkoutPageProps) {
     </div>
   );
 }
-

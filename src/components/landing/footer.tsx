@@ -9,18 +9,17 @@ export function Footer() {
 
   const footerLinks = {
     product: [
-      { label: "Functies", href: "#features" },
-      { label: "Prijzen", href: "#pricing" },
-      { label: "Hoe het werkt", href: "#how-it-works" },
+      { labelKey: "features", href: "#features" },
+      { labelKey: "howItWorks", href: "#how-it-works" },
     ],
     company: [
-      { label: "Over ons", href: "/about" },
-      { label: "Contact", href: "/contact" },
-      { label: "Blog", href: "/blog" },
+      { labelKey: "about", href: "/about" },
+      { labelKey: "contact", href: "/contact" },
+      { labelKey: "blog", href: "/blog" },
     ],
     legal: [
-      { label: "Privacy", href: "/privacy" },
-      { label: "Voorwaarden", href: "/terms" },
+      { labelKey: "privacy", href: "/privacy" },
+      { labelKey: "terms", href: "/terms" },
     ],
   };
 
@@ -92,7 +91,7 @@ export function Footer() {
                     href={link.href}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    {link.label}
+                    {t(link.labelKey)}
                   </Link>
                 </li>
               ))}
@@ -109,7 +108,7 @@ export function Footer() {
                     href={link.href}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    {link.label}
+                    {t(link.labelKey)}
                   </Link>
                 </li>
               ))}
@@ -126,7 +125,7 @@ export function Footer() {
                     href={link.href}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    {link.label}
+                    {t(link.labelKey)}
                   </Link>
                 </li>
               ))}
@@ -140,7 +139,7 @@ export function Footer() {
             {t("copyright", { year: currentYear })}
           </p>
           <p className="text-sm text-muted-foreground">
-            Gemaakt met ❤️ voor hardlopers
+            {t("madeWith")}
           </p>
         </div>
       </div>

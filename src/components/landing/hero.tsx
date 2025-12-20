@@ -23,7 +23,7 @@ export function HeroSection() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8 animate-fade-in">
             <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium text-primary">
-              AI-gedreven trainingsschema's
+              {t("badge")}
             </span>
           </div>
 
@@ -66,19 +66,22 @@ export function HeroSection() {
             </Button>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-8 max-w-xl mx-auto mt-16 animate-fade-in" style={{ animationDelay: "400ms" }}>
-            <div className="text-center">
-              <div className="text-3xl sm:text-4xl font-bold text-primary">10K+</div>
-              <div className="text-sm text-muted-foreground mt-1">Actieve lopers</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl sm:text-4xl font-bold text-primary">500K+</div>
-              <div className="text-sm text-muted-foreground mt-1">Km gelopen</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl sm:text-4xl font-bold text-primary">98%</div>
-              <div className="text-sm text-muted-foreground mt-1">Tevreden</div>
+          {/* 2026 Goals */}
+          <div className="mt-16 animate-fade-in" style={{ animationDelay: "400ms" }}>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4 font-medium">{t("stats.goalsTitle")}</p>
+            <div className="grid grid-cols-3 gap-8 max-w-xl mx-auto">
+              <div className="text-center">
+                <div className="text-3xl sm:text-4xl font-bold text-primary">1000+</div>
+                <div className="text-sm text-muted-foreground mt-1">{t("stats.activeRunners")}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl sm:text-4xl font-bold text-primary">2000+</div>
+                <div className="text-sm text-muted-foreground mt-1">{t("stats.completedPlans")}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl sm:text-4xl font-bold text-primary">100%</div>
+                <div className="text-sm text-muted-foreground mt-1">{t("stats.satisfaction")}</div>
+              </div>
             </div>
           </div>
         </div>

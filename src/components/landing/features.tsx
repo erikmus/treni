@@ -81,9 +81,9 @@ export function FeaturesSection() {
         {/* Additional highlight features */}
         <div className="grid sm:grid-cols-3 gap-6 mt-12">
           {[
-            { icon: Zap, title: "Snelle resultaten", desc: "Gemiddeld 15% sneller in 12 weken" },
-            { icon: Shield, title: "Blessurepreventie", desc: "Slim opbouwende belasting" },
-            { icon: Brain, title: "Slim plannen", desc: "Past zich aan je agenda aan" },
+            { icon: Zap, key: "fastResults" },
+            { icon: Shield, key: "injuryPrevention" },
+            { icon: Brain, key: "smartPlanning" },
           ].map((item, index) => {
             const Icon = item.icon;
             return (
@@ -95,8 +95,8 @@ export function FeaturesSection() {
                   <Icon className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium mb-1">{item.title}</h4>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
+                  <h4 className="font-medium mb-1">{t(`highlights.${item.key}.title`)}</h4>
+                  <p className="text-sm text-muted-foreground">{t(`highlights.${item.key}.description`)}</p>
                 </div>
               </div>
             );

@@ -34,19 +34,13 @@ export function LandingHeader() {
               href="#features"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
-              Functies
+              {t("landing.nav.features")}
             </Link>
             <Link
               href="#how-it-works"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
-              Hoe het werkt
-            </Link>
-            <Link
-              href="#pricing"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Prijzen
+              {t("landing.nav.howItWorks")}
             </Link>
           </div>
 
@@ -86,21 +80,14 @@ export function LandingHeader() {
               className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Functies
+              {t("landing.nav.features")}
             </Link>
             <Link
               href="#how-it-works"
               className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Hoe het werkt
-            </Link>
-            <Link
-              href="#pricing"
-              className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Prijzen
+              {t("landing.nav.howItWorks")}
             </Link>
             <div className="flex gap-2 pt-2">
               <Button variant="outline" asChild className="flex-1">

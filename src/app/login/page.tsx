@@ -1,7 +1,10 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { LoginForm } from "@/components/login-form";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const t = await getTranslations("auth.login");
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -35,9 +38,9 @@ export default function LoginPage() {
         <div className="absolute inset-0 flex items-center justify-center p-12">
           <div className="text-center">
             <div className="text-6xl mb-4">🏃‍♂️</div>
-            <h2 className="text-2xl font-bold mb-2">Welkom terug!</h2>
+            <h2 className="text-2xl font-bold mb-2">{t("sidebarTitle")}</h2>
             <p className="text-muted-foreground">
-              Log in om je trainingsschema te bekijken
+              {t("sidebarSubtitle")}
             </p>
           </div>
         </div>

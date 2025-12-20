@@ -257,6 +257,11 @@ export type Database = {
           id: string
           locale: string
           preferred_run_days: string[] | null
+          strava_access_token: string | null
+          strava_athlete_id: number | null
+          strava_refresh_token: string | null
+          strava_scope: string | null
+          strava_token_expires_at: string | null
           updated_at: string
           weekly_available_hours: number | null
         }
@@ -273,6 +278,11 @@ export type Database = {
           id: string
           locale?: string
           preferred_run_days?: string[] | null
+          strava_access_token?: string | null
+          strava_athlete_id?: number | null
+          strava_refresh_token?: string | null
+          strava_scope?: string | null
+          strava_token_expires_at?: string | null
           updated_at?: string
           weekly_available_hours?: number | null
         }
@@ -289,6 +299,11 @@ export type Database = {
           id?: string
           locale?: string
           preferred_run_days?: string[] | null
+          strava_access_token?: string | null
+          strava_athlete_id?: number | null
+          strava_refresh_token?: string | null
+          strava_scope?: string | null
+          strava_token_expires_at?: string | null
           updated_at?: string
           weekly_available_hours?: number | null
         }

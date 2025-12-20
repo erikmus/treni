@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { User, CreditCard, Bell, Link2, type LucideIcon } from "lucide-react";
+import { User, Gift, Bell, Link2, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function SettingsLayout({
@@ -33,7 +33,7 @@ export default function SettingsLayout({
     {
       titleKey: "nav.billing",
       href: "/dashboard/settings/billing",
-      icon: CreditCard,
+      icon: Gift,
     },
   ];
 

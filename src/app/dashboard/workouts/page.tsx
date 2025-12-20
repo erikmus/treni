@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { format, isToday, isFuture, isPast } from "date-fns";
-import { nl } from "date-fns/locale";
+import { nl, enUS } from "date-fns/locale";
+import { getTranslations, getLocale } from "next-intl/server";
 import { 
   Calendar, 
   Clock, 
@@ -10,7 +11,6 @@ import {
   Circle,
   ChevronRight,
   Dumbbell,
-  Filter,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -30,19 +30,6 @@ const workoutTypeColors: Record<string, { bg: string; text: string; border: stri
   rest: { bg: "bg-gray-500/10", text: "text-gray-700 dark:text-gray-400", border: "border-gray-500/30" },
 };
 
-const workoutTypeLabels: Record<string, string> = {
-  easy_run: "Rustige duurloop",
-  long_run: "Lange duurloop",
-  tempo_run: "Tempo",
-  interval: "Interval",
-  fartlek: "Fartlek",
-  recovery: "Herstel",
-  hill_training: "Heuveltraining",
-  race_pace: "Wedstrijdtempo",
-  cross_training: "Cross-training",
-  rest: "Rust",
-};
-
 const workoutTypeIcons: Record<string, string> = {
   easy_run: "🏃",
   long_run: "🏃‍♂️",
@@ -59,6 +46,10 @@ const workoutTypeIcons: Record<string, string> = {
 export default async function WorkoutsPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+  const t = await getTranslations("workouts");
+  const tCommon = await getTranslations("common");
+  const locale = await getLocale();
+  const dateLocale = locale === "nl" ? nl : enUS;
 
   if (!user) {
     redirect("/login");
@@ -90,13 +81,13 @@ export default async function WorkoutsPage() {
           <div className="rounded-full bg-primary/10 w-20 h-20 flex items-center justify-center mx-auto mb-6">
             <Dumbbell className="h-10 w-10 text-primary" />
           </div>
-          <h1 className="text-2xl font-bold mb-4">Nog geen workouts</h1>
+          <h1 className="text-2xl font-bold mb-4">{t("empty.title")}</h1>
           <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-            Maak eerst een trainingsschema om je workouts te zien.
+            {t("empty.description")}
           </p>
           <Button asChild size="lg">
             <Link href="/dashboard/plan/new">
-              Trainingsschema maken
+              {t("empty.cta")}
             </Link>
           </Button>
         </div>
@@ -109,9 +100,9 @@ export default async function WorkoutsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Workouts</h1>
+          <h1 className="text-3xl font-bold">{t("title")}</h1>
           <p className="text-muted-foreground mt-1">
-            {workouts.length} workout{workouts.length !== 1 ? "s" : ""} • {completedWorkouts.length} voltooid
+            {workouts.length} workout{workouts.length !== 1 ? "s" : ""} • {completedWorkouts.length} {t("status.completed").toLowerCase()}
           </p>
         </div>
       </div>
@@ -121,28 +112,28 @@ export default async function WorkoutsPage() {
         <div className="bg-card rounded-xl border p-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
             <Calendar className="h-4 w-4" />
-            Gepland
+            {t("stats.scheduled")}
           </div>
           <p className="text-2xl font-bold">{upcomingWorkouts.length}</p>
         </div>
         <div className="bg-card rounded-xl border p-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
             <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-            Voltooid
+            {t("stats.completed")}
           </div>
           <p className="text-2xl font-bold text-emerald-600">{completedWorkouts.length}</p>
         </div>
         <div className="bg-card rounded-xl border p-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
             <Circle className="h-4 w-4 text-orange-500" />
-            Gemist
+            {t("stats.missed")}
           </div>
           <p className="text-2xl font-bold text-orange-600">{missedWorkouts.length}</p>
         </div>
         <div className="bg-card rounded-xl border p-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
             <Clock className="h-4 w-4" />
-            Voltooiingspercentage
+            {t("stats.completionRate")}
           </div>
           <p className="text-2xl font-bold">
             {workouts.length > 0 
@@ -160,7 +151,7 @@ export default async function WorkoutsPage() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
-            Vandaag gepland
+            {t("todayScheduled")}
           </div>
           <Link 
             href={`/dashboard/workouts/${todayWorkout.id}`}
@@ -203,13 +194,14 @@ export default async function WorkoutsPage() {
         <div className="space-y-3">
           <h2 className="text-lg font-semibold flex items-center gap-2">
             <Calendar className="h-5 w-5" />
-            Komende workouts
+            {t("upcoming")}
           </h2>
           <div className="bg-card rounded-xl border divide-y">
             {upcomingWorkouts.slice(0, 10).map((workout) => {
               const colors = workoutTypeColors[workout.workout_type] || workoutTypeColors.easy_run;
               const icon = workoutTypeIcons[workout.workout_type] || "🏃";
-              const typeLabel = workoutTypeLabels[workout.workout_type] || workout.workout_type;
+              const workoutTypeKey = workout.workout_type as "easy_run" | "long_run" | "tempo_run" | "interval" | "fartlek" | "recovery" | "hill_training" | "race_pace" | "cross_training" | "rest";
+              const typeLabel = t.has(`types.${workoutTypeKey}`) ? t(`types.${workoutTypeKey}`) : workout.workout_type;
               const workoutDate = new Date(workout.scheduled_date);
               
               return (
@@ -237,8 +229,8 @@ export default async function WorkoutsPage() {
                       <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1">
                         <span>
                           {isToday(workoutDate) 
-                            ? "Vandaag" 
-                            : format(workoutDate, "EEEE d MMM", { locale: nl })}
+                            ? tCommon("today") 
+                            : format(workoutDate, "EEEE d MMM", { locale: dateLocale })}
                         </span>
                         {workout.target_duration_minutes && (
                           <span className="flex items-center gap-1">
@@ -262,7 +254,7 @@ export default async function WorkoutsPage() {
           </div>
           {upcomingWorkouts.length > 10 && (
             <p className="text-sm text-muted-foreground text-center">
-              En nog {upcomingWorkouts.length - 10} meer...
+              {tCommon("andMore", { count: upcomingWorkouts.length - 10 })}
             </p>
           )}
         </div>
@@ -273,7 +265,7 @@ export default async function WorkoutsPage() {
         <div className="space-y-3">
           <h2 className="text-lg font-semibold flex items-center gap-2">
             <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-            Voltooide workouts
+            {t("completedWorkouts")}
           </h2>
           <div className="bg-card rounded-xl border divide-y">
             {completedWorkouts.slice(-5).reverse().map((workout) => {
@@ -302,7 +294,7 @@ export default async function WorkoutsPage() {
                         {workout.title}
                       </h3>
                       <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1">
-                        <span>{format(workoutDate, "d MMM yyyy", { locale: nl })}</span>
+                        <span>{format(workoutDate, "d MMM yyyy", { locale: dateLocale })}</span>
                         {workout.target_distance_km && (
                           <span>{Number(workout.target_distance_km).toFixed(1)} km</span>
                         )}
@@ -319,4 +311,3 @@ export default async function WorkoutsPage() {
     </div>
   );
 }
-
