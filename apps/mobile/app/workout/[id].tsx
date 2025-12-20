@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Alert, Vibration, AppState, AppStateStatus } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Vibration, AppState, AppStateStatus, TextInput, ScrollView } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as Location from 'expo-location'
@@ -47,13 +47,18 @@ export default function WorkoutTrackingScreen() {
   const [settings, setSettings] = useState<UserSettings>({ distance_unit: 'km' })
   
   // Tracking state
-  const [status, setStatus] = useState<'loading' | 'ready' | 'running' | 'paused' | 'finished'>('loading')
+  const [status, setStatus] = useState<'loading' | 'ready' | 'running' | 'paused' | 'evaluating' | 'finished'>('loading')
   const [elapsedSeconds, setElapsedSeconds] = useState(0)
   const [distance, setDistance] = useState(0) // in meters
   const [currentPace, setCurrentPace] = useState<number | null>(null) // seconds per km
   const [avgPace, setAvgPace] = useState<number | null>(null)
   const [currentSpeed, setCurrentSpeed] = useState<number | null>(null) // m/s
   const [locations, setLocations] = useState<LocationPoint[]>([])
+  
+  // Post-workout evaluation
+  const [feeling, setFeeling] = useState<string | null>(null)
+  const [perceivedEffort, setPerceivedEffort] = useState<number | null>(null)
+  const [notes, setNotes] = useState('')
   
   // Current block tracking (for structured workouts)
   const [currentBlockIndex, setCurrentBlockIndex] = useState(0)
@@ -232,7 +237,6 @@ export default function WorkoutTrackingScreen() {
             if (locationSubscription.current) locationSubscription.current.remove()
             deactivateKeepAwake()
             
-            setStatus('finished')
             Vibration.vibrate([200, 100, 200, 100, 400])
             
             // Calculate average pace
@@ -241,12 +245,17 @@ export default function WorkoutTrackingScreen() {
               setAvgPace(avgPaceCalc)
             }
             
-            // Save activity to database
-            await saveActivity()
+            // Go to evaluation screen
+            setStatus('evaluating')
           }
         }
       ]
     )
+  }
+
+  const submitEvaluation = async () => {
+    await saveActivity()
+    setStatus('finished')
   }
 
   const saveActivity = async () => {
@@ -263,6 +272,9 @@ export default function WorkoutTrackingScreen() {
         duration_seconds: elapsedSeconds,
         avg_pace_sec_per_km: distance > 0 ? Math.round(elapsedSeconds / (distance / 1000)) : null,
         gpx_data: locations.length > 0 ? JSON.stringify(locations) : null,
+        feeling: feeling,
+        perceived_effort: perceivedEffort,
+        description: notes || null,
       })
       
       if (error) throw error
@@ -464,12 +476,133 @@ export default function WorkoutTrackingScreen() {
     )
   }
 
+  if (status === 'evaluating') {
+    const feelings = [
+      { value: 'great', emoji: '🤩', label: 'Super!' },
+      { value: 'good', emoji: '😊', label: 'Goed' },
+      { value: 'okay', emoji: '😐', label: 'Oké' },
+      { value: 'tired', emoji: '😓', label: 'Vermoeid' },
+      { value: 'exhausted', emoji: '😵', label: 'Uitgeput' },
+    ]
+
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.evaluationScroll} contentContainerStyle={styles.evaluationContainer}>
+          <Text style={styles.evaluationTitle}>Hoe ging het?</Text>
+          
+          {/* Summary */}
+          <View style={styles.evaluationSummary}>
+            <View style={styles.evaluationSummaryStat}>
+              <Text style={styles.evaluationSummaryValue}>{formatDistance(distance)}</Text>
+              <Text style={styles.evaluationSummaryLabel}>{settings.distance_unit}</Text>
+            </View>
+            <View style={styles.evaluationSummaryDivider} />
+            <View style={styles.evaluationSummaryStat}>
+              <Text style={styles.evaluationSummaryValue}>{formatTime(elapsedSeconds)}</Text>
+              <Text style={styles.evaluationSummaryLabel}>tijd</Text>
+            </View>
+            <View style={styles.evaluationSummaryDivider} />
+            <View style={styles.evaluationSummaryStat}>
+              <Text style={styles.evaluationSummaryValue}>{formatPace(avgPace)}</Text>
+              <Text style={styles.evaluationSummaryLabel}>/{settings.distance_unit}</Text>
+            </View>
+          </View>
+
+          {/* Feeling */}
+          <View style={styles.evaluationSection}>
+            <Text style={styles.evaluationSectionTitle}>Hoe voelde je je?</Text>
+            <View style={styles.feelingOptions}>
+              {feelings.map((f) => (
+                <TouchableOpacity
+                  key={f.value}
+                  style={[
+                    styles.feelingOption,
+                    feeling === f.value && styles.feelingOptionSelected,
+                  ]}
+                  onPress={() => setFeeling(f.value)}
+                >
+                  <Text style={styles.feelingEmoji}>{f.emoji}</Text>
+                  <Text style={[
+                    styles.feelingLabel,
+                    feeling === f.value && styles.feelingLabelSelected,
+                  ]}>{f.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+
+          {/* Perceived Effort */}
+          <View style={styles.evaluationSection}>
+            <Text style={styles.evaluationSectionTitle}>Hoe zwaar was het? (RPE)</Text>
+            <View style={styles.effortOptions}>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                <TouchableOpacity
+                  key={num}
+                  style={[
+                    styles.effortOption,
+                    perceivedEffort === num && styles.effortOptionSelected,
+                    num <= 3 && styles.effortOptionEasy,
+                    num >= 4 && num <= 6 && styles.effortOptionModerate,
+                    num >= 7 && num <= 8 && styles.effortOptionHard,
+                    num >= 9 && styles.effortOptionMax,
+                  ]}
+                  onPress={() => setPerceivedEffort(num)}
+                >
+                  <Text style={[
+                    styles.effortNumber,
+                    perceivedEffort === num && styles.effortNumberSelected,
+                  ]}>{num}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+            <View style={styles.effortLabels}>
+              <Text style={styles.effortLabelText}>Makkelijk</Text>
+              <Text style={styles.effortLabelText}>Maximaal</Text>
+            </View>
+          </View>
+
+          {/* Notes */}
+          <View style={styles.evaluationSection}>
+            <Text style={styles.evaluationSectionTitle}>Notities (optioneel)</Text>
+            <TextInput
+              style={styles.notesInput}
+              placeholder="Hoe ging de training? Wat viel je op?"
+              placeholderTextColor="#64748b"
+              multiline
+              numberOfLines={4}
+              value={notes}
+              onChangeText={setNotes}
+            />
+          </View>
+
+          {/* Submit */}
+          <TouchableOpacity 
+            style={styles.submitButton} 
+            onPress={submitEvaluation}
+          >
+            <Text style={styles.submitButtonText}>Opslaan</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.skipButton} 
+            onPress={() => {
+              saveActivity()
+              setStatus('finished')
+            }}
+          >
+            <Text style={styles.skipButtonText}>Overslaan</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </SafeAreaView>
+    )
+  }
+
   if (status === 'finished') {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.finishedContainer}>
           <Text style={styles.finishedEmoji}>🎉</Text>
-          <Text style={styles.finishedTitle}>Workout voltooid!</Text>
+          <Text style={styles.finishedTitle}>Workout opgeslagen!</Text>
           
           <View style={styles.summaryContainer}>
             <View style={styles.summaryRow}>
@@ -488,6 +621,19 @@ export default function WorkoutTrackingScreen() {
                 <Text style={styles.summaryLabel}>gem. tempo/{settings.distance_unit}</Text>
               </View>
             </View>
+            {feeling && (
+              <View style={styles.savedFeeling}>
+                <Text style={styles.savedFeelingEmoji}>
+                  {feelings.find(f => f.value === feeling)?.emoji}
+                </Text>
+                <Text style={styles.savedFeelingText}>
+                  {feelings.find(f => f.value === feeling)?.label}
+                </Text>
+                {perceivedEffort && (
+                  <Text style={styles.savedEffort}>• RPE {perceivedEffort}/10</Text>
+                )}
+              </View>
+            )}
           </View>
           
           <TouchableOpacity style={styles.doneButton} onPress={() => router.back()}>
@@ -497,6 +643,14 @@ export default function WorkoutTrackingScreen() {
       </SafeAreaView>
     )
   }
+
+  const feelings = [
+    { value: 'great', emoji: '🤩', label: 'Super!' },
+    { value: 'good', emoji: '😊', label: 'Goed' },
+    { value: 'okay', emoji: '😐', label: 'Oké' },
+    { value: 'tired', emoji: '😓', label: 'Vermoeid' },
+    { value: 'exhausted', emoji: '😵', label: 'Uitgeput' },
+  ]
 
   // Running or Paused state
   const paceIndicator = getPaceIndicator()
@@ -902,6 +1056,174 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#fff',
+  },
+  
+  // Evaluation styles
+  evaluationScroll: {
+    flex: 1,
+  },
+  evaluationContainer: {
+    padding: 24,
+    paddingBottom: 48,
+  },
+  evaluationTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
+    marginBottom: 24,
+  },
+  evaluationSummary: {
+    flexDirection: 'row',
+    backgroundColor: '#1e293b',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 32,
+  },
+  evaluationSummaryStat: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  evaluationSummaryValue: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  evaluationSummaryLabel: {
+    fontSize: 12,
+    color: '#64748b',
+    marginTop: 4,
+  },
+  evaluationSummaryDivider: {
+    width: 1,
+    backgroundColor: '#334155',
+  },
+  evaluationSection: {
+    marginBottom: 28,
+  },
+  evaluationSectionTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#fff',
+    marginBottom: 12,
+  },
+  feelingOptions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  feelingOption: {
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 12,
+    backgroundColor: '#1e293b',
+    width: '18%',
+  },
+  feelingOptionSelected: {
+    backgroundColor: '#3b82f6',
+  },
+  feelingEmoji: {
+    fontSize: 28,
+    marginBottom: 4,
+  },
+  feelingLabel: {
+    fontSize: 11,
+    color: '#94a3b8',
+    textAlign: 'center',
+  },
+  feelingLabelSelected: {
+    color: '#fff',
+  },
+  effortOptions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  effortOption: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#1e293b',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  effortOptionSelected: {
+    transform: [{ scale: 1.2 }],
+  },
+  effortOptionEasy: {
+    backgroundColor: '#22c55e',
+  },
+  effortOptionModerate: {
+    backgroundColor: '#f59e0b',
+  },
+  effortOptionHard: {
+    backgroundColor: '#ef4444',
+  },
+  effortOptionMax: {
+    backgroundColor: '#dc2626',
+  },
+  effortNumber: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  effortNumberSelected: {
+    fontWeight: 'bold',
+  },
+  effortLabels: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 8,
+  },
+  effortLabelText: {
+    fontSize: 12,
+    color: '#64748b',
+  },
+  notesInput: {
+    backgroundColor: '#1e293b',
+    borderRadius: 12,
+    padding: 16,
+    color: '#fff',
+    fontSize: 15,
+    minHeight: 100,
+    textAlignVertical: 'top',
+  },
+  submitButton: {
+    backgroundColor: '#22c55e',
+    borderRadius: 12,
+    paddingVertical: 16,
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  submitButtonText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  skipButton: {
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  skipButtonText: {
+    fontSize: 16,
+    color: '#64748b',
+  },
+  savedFeeling: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 16,
+    gap: 8,
+  },
+  savedFeelingEmoji: {
+    fontSize: 24,
+  },
+  savedFeelingText: {
+    fontSize: 16,
+    color: '#fff',
+    fontWeight: '500',
+  },
+  savedEffort: {
+    fontSize: 14,
+    color: '#94a3b8',
   },
 })
 

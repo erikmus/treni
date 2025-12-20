@@ -131,7 +131,8 @@ export default function Activities() {
     return (
       <TouchableOpacity
         style={[styles.activityCard, isSelected && styles.activityCardSelected]}
-        onPress={() => setSelectedActivity(isSelected ? null : item)}
+        onPress={() => router.push(`/activity/${item.id}`)}
+        onLongPress={() => setSelectedActivity(isSelected ? null : item)}
         activeOpacity={0.8}
       >
         <View style={styles.activityHeader}>
