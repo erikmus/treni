@@ -191,7 +191,7 @@ export function NotificationsDropdown({ locale = "nl" }: NotificationsDropdownPr
         ) : (
           <div className="max-h-[300px] overflow-y-auto">
             {notifications.map((notification) => {
-              const Icon = notificationIcons[notification.type] || Bell
+              const Icon = notificationIcons[notification.type as NotificationType] || Bell
               return (
                 <DropdownMenuItem
                   key={notification.id}
